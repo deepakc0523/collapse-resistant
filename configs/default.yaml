@@ -1,0 +1,21 @@
+# Default Configuration for Collapse-Resistant Training
+
+model:
+  name: "resnet18"
+  feature_dim: 128
+  projection_dim: 128
+
+training:
+  batch_size: 256
+  epochs: 100
+  learning_rate: 0.03
+  weight_decay: 1e-4
+  optimizer: "adamw"
+
+collapse_prevention:
+  method: "decorrelation" # e.g., decorrelation, alignment, contrastive
+  lambda_decorr: 0.01
+
+logging:
+  log_interval: 10
+  tensorboard: true
