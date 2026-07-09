@@ -124,6 +124,10 @@ def load_frozen_anchor() -> Tuple[PreTrainedModel, PreTrainedTokenizerBase]:
     model = AutoModelForCausalLM.from_pretrained(str(FROZEN_ANCHOR_DIR))
     tokenizer = AutoTokenizer.from_pretrained(str(FROZEN_ANCHOR_DIR))
     
+    for param in model.parameters():
+        param.requires_grad = False
+
+    model.eval()
     # Ensure pad token is set (DistilGPT2 uses EOS for pad)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token

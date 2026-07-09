@@ -113,13 +113,13 @@ MODEL_NAME: str = "distilgpt2"
 # --- Training hyperparameters ---
 BATCH_SIZE: int        = 8          # sequences per gradient step
 GRAD_ACCUM_STEPS: int  = 4          # effective batch = BATCH_SIZE * GRAD_ACCUM_STEPS = 32
-NUM_EPOCHS: int        = 3          # full passes over the corpus
+NUM_EPOCHS: int        = 1          # full passes over the corpus
 LEARNING_RATE: float   = 5e-5       # peak LR for AdamW
 WEIGHT_DECAY: float    = 0.01       # L2 regularisation coefficient
 WARMUP_RATIO: float    = 0.06       # fraction of steps used for LR warmup
 MAX_GRAD_NORM: float   = 1.0        # gradient clipping threshold
 VAL_SPLIT_RATIO: float = 0.02       # fraction of data reserved for validation
-MAX_SAMPLES: Optional[int] = None   # None = use full dataset; set e.g. 5000 for fast debug
+MAX_SAMPLES: Optional[int] = 10000   # None = use full dataset; set e.g. 5000 for fast debug
 NUM_WORKERS: int       = 0          # DataLoader workers (0 = safe on Windows)
 
 # --- Mixed precision ---
