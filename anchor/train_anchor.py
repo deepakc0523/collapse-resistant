@@ -91,17 +91,17 @@ except ImportError as e:
     print("Install with:  pip install torch transformers")
     sys.exit(1)
 
-# Add datasets/ to path so we can import lm_dataset
+# Add data/ to path so we can import lm_dataset
 _ANCHOR_DIR: Path = Path(__file__).resolve().parent        # anchor/
 _PROJECT_DIR: Path = _ANCHOR_DIR.parent                    # project root
-_DATASETS_DIR: Path = _PROJECT_DIR / "datasets"
+_DATASETS_DIR: Path = _PROJECT_DIR / "data"
 sys.path.insert(0, str(_DATASETS_DIR))
 
 try:
     from lm_dataset import WikiTextLMDataset, TOKENIZED_DIR
 except ImportError as e:
     print(f"[FATAL] Could not import lm_dataset: {e}")
-    print("Run  python datasets/tokenize_dataset.py  first.")
+    print("Run  python data/tokenize_dataset.py  first.")
     sys.exit(1)
 
 # ============================================================
