@@ -1,0 +1,165 @@
+{
+    "metadata": {
+        "title": "Anchor-Regularized Model Evolution (ARME) - Representation Drift Report",
+        "framework_version": "1.0",
+        "description": "Scientific analysis of student model representation collapse/drift compared to the frozen anchor.",
+        "configurations": {
+            "anchor_model_path": "D:\\collapse-resistant-training\\checkpoints\\anchor_model\\frozen",
+            "student_model_path": "D:\\collapse-resistant-training\\checkpoints\\student_model\\best",
+            "dataset_source": "Verification Test Prompt",
+            "max_prompts": 1,
+            "device": "cpu"
+        }
+    },
+    "embedding_analysis": {
+        "static": {
+            "token_embeddings_cosine_similarity": 0.00138575688470155,
+            "token_embeddings_euclidean_distance": 3.9094815254211426,
+            "position_embeddings_cosine_similarity": 0.00010028138058260083,
+            "position_embeddings_euclidean_distance": 3.4344937801361084
+        },
+        "dynamic": {
+            "token_embeddings_cosine_similarity_mean": -0.010167420841753483,
+            "token_embeddings_euclidean_distance_mean": 3.6115493774414062,
+            "position_embeddings_cosine_similarity_mean": -0.009065917693078518,
+            "position_embeddings_euclidean_distance_mean": 4.650404453277588
+        }
+    },
+    "attention_analysis": {
+        "layer_wise_attention_cosine_similarity": {
+            "layer_0": 0.7324827313423157,
+            "layer_1": 0.6755329966545105,
+            "layer_2": 0.6468440890312195,
+            "layer_3": 0.6039466261863708,
+            "layer_4": 0.5875704288482666,
+            "layer_5": 0.6341386437416077
+        },
+        "layer_wise_attention_jsd": {
+            "layer_0": 0.15306545794010162,
+            "layer_1": 0.1744951754808426,
+            "layer_2": 0.23089271783828735,
+            "layer_3": 0.2517683207988739,
+            "layer_4": 0.25425922870635986,
+            "layer_5": 0.21972507238388062
+        },
+        "head_specific_jsd": [
+            [
+                0.07166212052106857,
+                0.39015522599220276,
+                0.07959264516830444,
+                0.31845957040786743,
+                0.11840087920427322,
+                0.3830803632736206,
+                0.05560220777988434,
+                0.10552983731031418,
+                0.05656735226511955,
+                0.10914094001054764,
+                0.09747478365898132,
+                0.05111957713961601
+            ],
+            [
+                0.11508464068174362,
+                0.11068344116210938,
+                0.2045174390077591,
+                0.11000790446996689,
+                0.17675644159317017,
+                0.1802443265914917,
+                0.24493519961833954,
+                0.25146833062171936,
+                0.22977830469608307,
+                0.13427098095417023,
+                0.11251881718635559,
+                0.22367620468139648
+            ],
+            [
+                0.3103106617927551,
+                0.2712067663669586,
+                0.2724502384662628,
+                0.13164161145687103,
+                0.1707509309053421,
+                0.16306208074092865,
+                0.1407235711812973,
+                0.16411812603473663,
+                0.2194865494966507,
+                0.2290922850370407,
+                0.2899927496910095,
+                0.4078773260116577
+            ],
+            [
+                0.21694833040237427,
+                0.28141453862190247,
+                0.3977782726287842,
+                0.1661256104707718,
+                0.14062245190143585,
+                0.20972824096679688,
+                0.2432236522436142,
+                0.2815517485141754,
+                0.18853093683719635,
+                0.20393508672714233,
+                0.36062172055244446,
+                0.33073946833610535
+            ],
+            [
+                0.20096075534820557,
+                0.33281946182250977,
+                0.1674036979675293,
+                0.1330675631761551,
+                0.3328549265861511,
+                0.22430135309696198,
+                0.3196380138397217,
+                0.18937885761260986,
+                0.28077515959739685,
+                0.35974010825157166,
+                0.18238717317581177,
+                0.3277834355831146
+            ],
+            [
+                0.08061041682958603,
+                0.27458658814430237,
+                0.2899414598941803,
+                0.18557439744472504,
+                0.25852730870246887,
+                0.28536105155944824,
+                0.3015107214450836,
+                0.21245865523815155,
+                0.12640173733234406,
+                0.3029871881008148,
+                0.10580730438232422,
+                0.21293409168720245
+            ]
+        ]
+    },
+    "logit_analysis": {
+        "mean_kl_divergence": 3.7575225830078125,
+        "mean_js_divergence": 0.4741767644882202,
+        "prediction_agreement_top1": 0.08333333333333333,
+        "prediction_agreement_top5": 0.2500000198682149,
+        "vocabulary_overlap_top50": 0.15941986441612244
+    },
+    "layer_wise_hidden_state_analysis": {
+        "layer_0": {
+            "cosine_similarity": -0.00817940259973208,
+            "euclidean_distance": 74.93197631835938
+        },
+        "layer_1": {
+            "cosine_similarity": -0.017120711505413055,
+            "euclidean_distance": 194.965087890625
+        },
+        "layer_2": {
+            "cosine_similarity": -0.021269877751668293,
+            "euclidean_distance": 219.5163777669271
+        },
+        "layer_3": {
+            "cosine_similarity": 0.00115251075476408,
+            "euclidean_distance": 248.87076822916666
+        },
+        "layer_4": {
+            "cosine_similarity": 0.0052650899936755495,
+            "euclidean_distance": 304.74566650390625
+        },
+        "layer_5": {
+            "cosine_similarity": -0.009903243432442347,
+            "euclidean_distance": 167.6490478515625
+        }
+    }
+}
