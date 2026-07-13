@@ -12,7 +12,7 @@ from typing import Tuple, Optional
 import torch
 from torch.utils.data import Dataset, DataLoader
 from datasets import load_from_disk
-from student_model import get_tokenizer
+from .student_model import get_tokenizer
 
 class SyntheticLMDataset(Dataset):
     """

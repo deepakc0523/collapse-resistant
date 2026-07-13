@@ -15,20 +15,20 @@ import torch
 from torch.cuda.amp import GradScaler
 
 # Import components from the student module
-from student_config import (
+from .student_config import (
     SYNTHETIC_DATA_DIR, CHECKPOINT_DIR, TRAINING_LOG_FILE,
     TRAINING_HISTORY_FILE, MODEL_STATISTICS_FILE, MODEL_TYPE,
     BATCH_SIZE, GRAD_ACCUM_STEPS, NUM_EPOCHS, LEARNING_RATE,
     WEIGHT_DECAY, WARMUP_RATIO, MAX_GRAD_NORM, VAL_SPLIT_RATIO,
     MAX_SAMPLES, NUM_WORKERS
 )
-from utils import get_logger, get_device, set_seed
-from synthetic_dataset import build_dataloaders
-from student_model import load_random_student_model, get_tokenizer
-from train_student import build_optimizer_scheduler, train_one_epoch
-from evaluate_student import evaluate
-from save_checkpoint import save_checkpoint
-from student_statistics import save_model_statistics
+from .utils import get_logger, get_device, set_seed
+from .synthetic_dataset import build_dataloaders
+from .student_model import load_random_student_model, get_tokenizer
+from .train_student import build_optimizer_scheduler, train_one_epoch
+from .evaluate_student import evaluate
+from .save_checkpoint import save_checkpoint
+from .student_statistics import save_model_statistics
 
 def _section(title: str) -> None:
     bar = "=" * 60

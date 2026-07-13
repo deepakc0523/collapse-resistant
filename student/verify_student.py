@@ -15,9 +15,9 @@ Checks:
 
 import sys
 import torch
-from student_config import SYNTHETIC_DATA_DIR, MODEL_TYPE
-from student_model import load_random_student_model, get_tokenizer
-from synthetic_dataset import build_dataloaders
+from .student_config import SYNTHETIC_DATA_DIR, MODEL_TYPE
+from .student_model import load_random_student_model, get_tokenizer
+from .synthetic_dataset import build_dataloaders
 from transformers import AutoModelForCausalLM
 
 def verify_random_initialization():
