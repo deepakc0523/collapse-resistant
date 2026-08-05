@@ -14,34 +14,34 @@ Processed    : 10 prompts
   Static Pos Embedding (WPE) Cosine Similarity   : 0.000100
   Static Pos Embedding (WPE) Euclidean Distance  : 3.434494
 
-  Dynamic (Prompt Context) Token Embedding Cosine : 0.004814
-  Dynamic (Prompt Context) Pos Embedding Cosine   : 0.002816
+  Dynamic (Prompt Context) Token Embedding Cosine : 0.006247
+  Dynamic (Prompt Context) Pos Embedding Cosine   : 0.002866
 
 2. LOGIT & PREDICTION DIVERGENCE
 ----------------------------------------
-  Mean KL Divergence (Anchor || Student)         : 3.781792
-  Mean Jensen-Shannon Divergence (JSD)           : 0.493702
-  Top-1 Prediction Agreement                     : 11.89%
-  Top-5 Prediction Agreement                     : 19.25%
-  Vocabulary Overlap (Jaccard top-50)            : 14.74%
+  Mean KL Divergence (Anchor || Student)         : 3.819672
+  Mean Jensen-Shannon Divergence (JSD)           : 0.496032
+  Top-1 Prediction Agreement                     : 12.65%
+  Top-5 Prediction Agreement                     : 18.41%
+  Vocabulary Overlap (Jaccard top-50)            : 14.42%
 
 3. LAYER-WISE REPRESENTATION ALIGNMENT
 ----------------------------------------
-  LAYER_0  -> Cosine Similarity: 0.002266 | Euclidean Distance: 54.403311
-  LAYER_1  -> Cosine Similarity: -0.001724 | Euclidean Distance: 96.402137
-  LAYER_2  -> Cosine Similarity: -0.003670 | Euclidean Distance: 111.732907
-  LAYER_3  -> Cosine Similarity: 0.002963 | Euclidean Distance: 134.382092
-  LAYER_4  -> Cosine Similarity: 0.003868 | Euclidean Distance: 188.684938
-  LAYER_5  -> Cosine Similarity: -0.012469 | Euclidean Distance: 171.248654
+  LAYER_0  -> Cosine Similarity: 0.003807 | Euclidean Distance: 54.569953
+  LAYER_1  -> Cosine Similarity: 0.001266 | Euclidean Distance: 96.512939
+  LAYER_2  -> Cosine Similarity: -0.000709 | Euclidean Distance: 111.729470
+  LAYER_3  -> Cosine Similarity: 0.004991 | Euclidean Distance: 134.246305
+  LAYER_4  -> Cosine Similarity: 0.005084 | Euclidean Distance: 188.524070
+  LAYER_5  -> Cosine Similarity: -0.013787 | Euclidean Distance: 170.949381
 
 4. LAYER-WISE ATTENTION MAP ALIGNMENT
 ----------------------------------------
-  LAYER_0  -> Attention Cosine Similarity: 0.633283 | Attention JSD: 0.206090
-  LAYER_1  -> Attention Cosine Similarity: 0.534774 | Attention JSD: 0.264857
-  LAYER_2  -> Attention Cosine Similarity: 0.476239 | Attention JSD: 0.322279
-  LAYER_3  -> Attention Cosine Similarity: 0.428673 | Attention JSD: 0.371671
-  LAYER_4  -> Attention Cosine Similarity: 0.419786 | Attention JSD: 0.356224
-  LAYER_5  -> Attention Cosine Similarity: 0.475196 | Attention JSD: 0.295280
+  LAYER_0  -> Attention Cosine Similarity: 0.635986 | Attention JSD: 0.202095
+  LAYER_1  -> Attention Cosine Similarity: 0.532989 | Attention JSD: 0.264836
+  LAYER_2  -> Attention Cosine Similarity: 0.476397 | Attention JSD: 0.321433
+  LAYER_3  -> Attention Cosine Similarity: 0.427694 | Attention JSD: 0.371170
+  LAYER_4  -> Attention Cosine Similarity: 0.419000 | Attention JSD: 0.357029
+  LAYER_5  -> Attention Cosine Similarity: 0.475010 | Attention JSD: 0.295728
 
 ================================================================================
 DEEP LEARNING ANALYSIS / SCIENTIFIC COMMENTS
