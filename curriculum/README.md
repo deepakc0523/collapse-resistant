@@ -1,0 +1,170 @@
+# Curriculum Controller (CC)
+
+The **Curriculum Controller (CC)** is the adaptive dataset construction engine in the **Collapse-Resistant Recursive Language Model Training Framework**. Operating directly downstream from the **Adaptive Threshold Engine (ATE)**, CC converts derived hyperparameter policies (`adaptive_out/adaptive_policy.json`) into an organized, deterministic, 3-stage progressive Generation-$(N+1)$ training dataset exported to `curriculum_out/generation_2/`.
+
+---
+
+## 1. Primary Objective & Design Philosophy
+
+The primary objective of the Curriculum Controller is **Adaptive Dataset Construction**.
+
+### Key Rules
+- **No Direct Model Training**: CC does not execute gradient updates, modify model checkpoints, or compute risk scores.
+- **Progressive Exposure**: CC **never** simply concatenates anchor and synthetic datasets. It arranges records into a 3-stage progressive sequence from canonical human anchor ground truth to target policy synthetic exposure.
+- **Strict Reproducibility**: Given the same input policy, random seed, and dataset pools, CC produces the exact same Generation-$(N+1)$ dataset byte-for-byte.
+
+---
+
+## 2. Pipeline Integration
+
+```
+ Adaptive Threshold Engine (adaptive/)
+               │
+               ▼
+ ATE Policy JSON (adaptive_out/adaptive_policy.json)
+               │
+               ▼
+ Curriculum Controller (curriculum/)
+               │
+               ▼
+ Generation-2 Export (curriculum_out/generation_2/)
+   ├── train.jsonl
+   ├── validation.jsonl
+   ├── metadata.json
+   └── curriculum_summary.txt
+               │
+               ▼
+  Google Colab / Student Training Pipeline
+```
+
+---
+
+## 3. Dataset Construction & Curriculum Scheduling Algorithms
+
+### Dataset Mixing Algorithm
+Given total sample budget $N_{\text{total}}$ and target ratios $(r_{\text{synthetic}}, r_{\text{anchor}})$ from ATE:
+
+$$N_{\text{synthetic}} = \text{round}(N_{\text{total}} \cdot r_{\text{synthetic}})$$
+
+$$N_{\text{anchor}} = N_{\text{total}} - N_{\text{synthetic}}$$
+
+Anchor and synthetic records are sampled deterministically using PRNG seed `random_seed`.
+
+### 3-Stage Progressive Scheduling Algorithm
+
+| Stage | Proportion | Description | Composition |
+|---|---|---|---|
+| **Stage 1: Foundation** | 25% | Pure Canonical Anchor Ground Truth | 100% Anchor / 0% Synthetic |
+| **Stage 2: Transition** | 45% | Interleaved Heavy-Anchor / Light-Synthetic Blend | ~80% Anchor / ~20% Synthetic |
+| **Stage 3: Advanced Exposure** | 30% | Policy Target Exposure | Target Policy Mix Ratio |
+
+This progressive ordering ensures that student models stabilize their representation geometry on ground-truth anchor tokens before being exposed to synthetic generation variance.
+
+---
+
+## 4. Expected File Structure
+
+```
+curriculum/
+├── __init__.py
+├── curriculum_config.py
+├── utils.py
+├── policy_loader.py
+├── dataset_loader.py
+├── dataset_sampler.py
+├── dataset_mixer.py
+├── curriculum_scheduler.py
+├── metadata_generator.py
+├── dataset_validator.py
+├── dataset_exporter.py
+├── curriculum_report.py
+├── visualization.py
+├── verify_curriculum.py
+├── run_curriculum.py
+└── README.md
+```
+
+---
+
+## 5. Output Specification (`curriculum_out/generation_2/`)
+
+### `metadata.json` Schema
+```json
+{
+    "generation_id": "generation_2",
+    "generation_parent": "generation_1",
+    "creation_time": "2026-08-21T21:03:00",
+    "framework_version": "1.0",
+    "hyperparameters": {
+        "synthetic_ratio": 0.3541,
+        "anchor_ratio": 0.6459,
+        "learning_rate": 8.42e-06,
+        "epochs": 2,
+        "sampling_temperature": 0.4520,
+        "max_generation_depth": 2,
+        "training_status": "HIGH_RISK"
+    },
+    "upstream_risk_scores": {
+        "SCRS": 0.7444,
+        "representation_risk": 0.7084,
+        "uncertainty_risk": 0.7983,
+        "risk_sensitivity_score": 0.8124
+    },
+    "dataset_sizes": {
+        "total_samples": 1000,
+        "train_samples": 900,
+        "val_samples": 100,
+        "target_synthetic_count": 354,
+        "target_anchor_count": 646
+    },
+    "random_seed": 42,
+    "curriculum_schedule": {
+        "stage_boundaries": {
+            "Stage_1_Foundation": [0, 250],
+            "Stage_2_Transition": [250, 700],
+            "Stage_3_Advanced": [700, 1000]
+        },
+        "stage_compositions": {
+            "Stage_1_Foundation": { "anchor_ratio": 1.0, "synthetic_ratio": 0.0, "count": 250 },
+            "Stage_2_Transition": { "anchor_ratio": 0.80, "synthetic_ratio": 0.20, "count": 450 },
+            "Stage_3_Advanced": { "anchor_ratio": 0.38, "synthetic_ratio": 0.62, "count": 300 }
+        }
+    },
+    "validation_summary": {
+        "is_valid": true,
+        "duplicates_removed": 0,
+        "empty_removed": 0,
+        "corrupted_removed": 0,
+        "ratio_error": 0.0
+    }
+}
+```
+
+---
+
+## 6. Generated Visualizations (`curriculum_out/plots/`)
+
+1. **`dataset_composition.png`**: Donut chart displaying the final Anchor vs Synthetic proportion.
+2. **`curriculum_progression.png`**: Moving average ratio curve demonstrating progressive anchor-to-synthetic exposure across dataset indices.
+3. **`curriculum_schedule.png`**: Stacked bar plot illustrating Stage 1, Stage 2, and Stage 3 composition fractions.
+4. **`sample_distribution.png`**: Text character length histogram comparing human anchor vs synthetic records.
+5. **`generation_flow.png`**: End-to-end flowchart from inputs (Anchor + Generation-1) through ATE Policy to Generation-2 output files.
+
+---
+
+## 7. Integration with Google Colab
+
+The generated `curriculum_out/generation_2/` folder can be directly copied into Google Colab or mounted via Google Drive:
+
+```python
+# Colab Student Training Loading Example
+import json
+
+with open("curriculum_out/generation_2/metadata.json") as f:
+    meta = json.load(f)
+
+epochs = meta["hyperparameters"]["epochs"]
+lr = meta["hyperparameters"]["learning_rate"]
+
+# Train student model using train.jsonl and validation.jsonl
+```

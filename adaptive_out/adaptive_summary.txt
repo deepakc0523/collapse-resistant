@@ -1,0 +1,52 @@
+================================================================================
+          ADAPTIVE THRESHOLD ENGINE (ATE) POLICY REPORT                         
+================================================================================
+ Timestamp           : 2026-08-21 20:53:55
+ Upstream SCRS Score : 0.7444 (High)
+ Training Status     : HIGH_RISK
+ Primary Risk Driver : rep_hidden_state_drift (contribution: 0.1000)
+--------------------------------------------------------------------------------
+ GENERATION-(N+1) RECOMMENDED POLICY                                            
+--------------------------------------------------------------------------------
+  • Synthetic Data Mix Ratio   : 0.2500 (25.0%)
+  • Anchor Data Mix Ratio      : 0.7500 (75.0%)
+  • Recommended Epochs         : 2
+  • Recommended Learning Rate  : 2.019667e-06
+  • Sampling Temperature       : 0.4395
+  • Max Generation Depth       : 2
+  • Continue Recursive Train   : True
+  • Risk Sensitivity Score (S) : 0.8125
+--------------------------------------------------------------------------------
+ SCIENTIFIC RATIONALE & JUSTIFICATIONS                                         
+--------------------------------------------------------------------------------
+ [1] Synthetic vs Anchor Mix Ratio (Synthetic: 0.25, Anchor: 0.75): Derived continuously to balance innovation with canonical anchor regularization. Elevated drift in representation requires scaling anchor ratio to 0.75 to prevent recursive information entropy accumulation.
+ [2] Learning Rate (2.02e-06): Adjusted smoothly relative to total risk sensitivity (S=0.8125). Decaying learning rate stabilizes optimization geometry when hidden state drift is detected.
+ [3] Training Epochs (2): Scaled down to prevent over-fitting to intermediate synthetic output distributions under drift.
+ [4] Sampling Temperature (0.44): Dampened from baseline 0.70 to sharpen probability distribution and constrain speculative variance during synthetic data generation.
+ [5] Max Generation Depth (2): Constrained based on remaining collapse safety margin to prevent deep recursive error propagation.
+--------------------------------------------------------------------------------
+ RECOMMENDED MITIGATION ACTIONS                                                 
+--------------------------------------------------------------------------------
+ [1] Substantially increase anchor ratio to 50%+ to anchor representations.
+ [2] Apply constrained learning rate and reduced sampling temperature.
+ [3] Schedule interim Probe evaluation prior to full Generation-(N+2) rollout.
+--------------------------------------------------------------------------------
+ CURRICULUM CONTROLLER DIRECTIVES                                               
+--------------------------------------------------------------------------------
+{
+  "target_generation": "Generation-(N+1)",
+  "continue_pipeline": true,
+  "dataset_synthesis_spec": {
+    "synthetic_ratio": 0.2500099741551872,
+    "anchor_ratio": 0.7499900258448128,
+    "sampling_temperature": 0.4394684448195827,
+    "max_depth": 2
+  },
+  "training_hyperparameters": {
+    "epochs": 2,
+    "learning_rate": 2.0196668406799357e-06
+  },
+  "risk_mitigation_mode": "HIGH_RISK",
+  "consumed_scrs_report": "scrs_report.json"
+}
+================================================================================

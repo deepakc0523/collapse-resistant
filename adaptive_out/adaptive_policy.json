@@ -1,0 +1,72 @@
+{
+    "metadata": {
+        "title": "Adaptive Threshold Engine (ATE) Policy Report",
+        "framework_version": "1.0",
+        "timestamp": "2026-08-21T20:53:55.565207",
+        "scrs_source_report": "D:\\collapse-resistant-training\\scrs_out\\scrs_report.json"
+    },
+    "training_status": "HIGH_RISK",
+    "policy": {
+        "synthetic_ratio": 0.25,
+        "anchor_ratio": 0.75,
+        "recommended_epochs": 2,
+        "recommended_learning_rate": 2.019667e-06,
+        "sampling_temperature": 0.4395,
+        "max_generation_depth": 2,
+        "continue_recursive_training": true,
+        "risk_sensitivity_score": 0.8125
+    },
+    "scrs_summary": {
+        "overall_scrs": 0.7444,
+        "representation_risk": 0.7084,
+        "uncertainty_risk": 0.7983,
+        "upstream_risk_label": "High"
+    },
+    "primary_risk_driver": "rep_hidden_state_drift (contribution: 0.1000)",
+    "metric_influence": {
+        "rep_hidden_state_drift": 0.1,
+        "rep_embedding_drift": 0.0994,
+        "rep_attention_drift": 0.0505,
+        "rep_kl_divergence": 0.0382,
+        "rep_js_divergence": 0.0496,
+        "rep_prediction_agreement": 0.0874,
+        "unc_predictive_entropy": 0.0487,
+        "unc_top1_confidence": 0.0628,
+        "unc_top5_spread": 0.064,
+        "unc_probability_variance": 0.0665,
+        "unc_confidence_margin": 0.065,
+        "unc_mc_dropout_consistency": 0.0123
+    },
+    "recommendations": {
+        "status_summary": "The model evaluation yields an overall SCRS of 0.7444, placing Generation-(N) in the HIGH_RISK category. Representation Risk is 0.7084 and Uncertainty Risk is 0.7983. Primary collapse risk driver is identified as rep_hidden_state_drift (contribution: 0.1000).",
+        "primary_risk_driver": "rep_hidden_state_drift (contribution: 0.1000)",
+        "justifications": [
+            "Synthetic vs Anchor Mix Ratio (Synthetic: 0.25, Anchor: 0.75): Derived continuously to balance innovation with canonical anchor regularization. Elevated drift in representation requires scaling anchor ratio to 0.75 to prevent recursive information entropy accumulation.",
+            "Learning Rate (2.02e-06): Adjusted smoothly relative to total risk sensitivity (S=0.8125). Decaying learning rate stabilizes optimization geometry when hidden state drift is detected.",
+            "Training Epochs (2): Scaled down to prevent over-fitting to intermediate synthetic output distributions under drift.",
+            "Sampling Temperature (0.44): Dampened from baseline 0.70 to sharpen probability distribution and constrain speculative variance during synthetic data generation.",
+            "Max Generation Depth (2): Constrained based on remaining collapse safety margin to prevent deep recursive error propagation."
+        ],
+        "curriculum_instructions": {
+            "target_generation": "Generation-(N+1)",
+            "continue_pipeline": true,
+            "dataset_synthesis_spec": {
+                "synthetic_ratio": 0.2500099741551872,
+                "anchor_ratio": 0.7499900258448128,
+                "sampling_temperature": 0.4394684448195827,
+                "max_depth": 2
+            },
+            "training_hyperparameters": {
+                "epochs": 2,
+                "learning_rate": 2.0196668406799357e-06
+            },
+            "risk_mitigation_mode": "HIGH_RISK",
+            "consumed_scrs_report": "scrs_report.json"
+        },
+        "mitigation_actions": [
+            "Substantially increase anchor ratio to 50%+ to anchor representations.",
+            "Apply constrained learning rate and reduced sampling temperature.",
+            "Schedule interim Probe evaluation prior to full Generation-(N+2) rollout."
+        ]
+    }
+}

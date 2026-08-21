@@ -1,0 +1,69 @@
+{
+    "generation_id": "generation_2",
+    "generation_parent": "generation_1",
+    "creation_time": "2026-08-21T21:11:14.652518",
+    "framework_version": "1.0",
+    "hyperparameters": {
+        "synthetic_ratio": 0.25,
+        "anchor_ratio": 0.75,
+        "learning_rate": 2.019667e-06,
+        "epochs": 2,
+        "sampling_temperature": 0.4395,
+        "max_generation_depth": 2,
+        "training_status": "HIGH_RISK"
+    },
+    "upstream_risk_scores": {
+        "SCRS": 0.7444,
+        "representation_risk": 0.7084,
+        "uncertainty_risk": 0.7983,
+        "risk_sensitivity_score": 0.8125
+    },
+    "dataset_sizes": {
+        "total_samples": 997,
+        "train_samples": 897,
+        "val_samples": 100,
+        "target_synthetic_count": 249,
+        "target_anchor_count": 748
+    },
+    "random_seed": 42,
+    "curriculum_schedule": {
+        "stage_boundaries": {
+            "Stage_1_Foundation": [
+                0,
+                250
+            ],
+            "Stage_2_Transition": [
+                250,
+                700
+            ],
+            "Stage_3_Advanced": [
+                700,
+                1000
+            ]
+        },
+        "stage_compositions": {
+            "Stage_1_Foundation": {
+                "anchor_ratio": 1.0,
+                "synthetic_ratio": 0.0,
+                "count": 250
+            },
+            "Stage_2_Transition": {
+                "anchor_ratio": 0.8,
+                "synthetic_ratio": 0.2,
+                "count": 450
+            },
+            "Stage_3_Advanced": {
+                "anchor_ratio": 0.4667,
+                "synthetic_ratio": 0.5333,
+                "count": 300
+            }
+        }
+    },
+    "validation_summary": {
+        "is_valid": true,
+        "duplicates_removed": 3,
+        "empty_removed": 0,
+        "corrupted_removed": 0,
+        "ratio_error": 0.000752
+    }
+}

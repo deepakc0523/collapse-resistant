@@ -1,0 +1,39 @@
+================================================================================
+          CURRICULUM CONTROLLER (CC) GENERATION-2 REPORT                        
+================================================================================
+ Timestamp           : 2026-08-21 21:11:14
+ Target Generation   : Generation-2
+ Parent Generation   : Generation-1
+ Consumed ATE Policy : adaptive_policy.json
+ Training Status     : HIGH_RISK
+--------------------------------------------------------------------------------
+ DATASET MIXING & SIZE SPECIFICATION                                           
+--------------------------------------------------------------------------------
+  - Total Dataset Size         : 997 samples
+  - Training Split Count       : 897 samples (90%)
+  - Validation Split Count     : 100 samples (10%)
+  - Synthetic Data Mix Ratio   : 0.2500 (249 samples)
+  - Anchor Data Mix Ratio      : 0.7500 (748 samples)
+  - Random Seed                : 42 (Deterministic)
+--------------------------------------------------------------------------------
+ 3-STAGE PROGRESSIVE CURRICULUM SCHEDULE                                        
+--------------------------------------------------------------------------------
+  [Stage_1_Foundation] Count: 250 | Anchor Ratio: 1.00 | Synthetic Ratio: 0.00
+  [Stage_2_Transition] Count: 450 | Anchor Ratio: 0.80 | Synthetic Ratio: 0.20
+  [Stage_3_Advanced] Count: 300 | Anchor Ratio: 0.47 | Synthetic Ratio: 0.53
+--------------------------------------------------------------------------------
+ DATASET INTEGRITY & VALIDATION                                                 
+--------------------------------------------------------------------------------
+  - Validation Passed          : True
+  - Duplicate Samples Removed  : 3
+  - Empty Records Removed      : 0
+  - Corrupted Records Removed  : 0
+  - Ratio Error Margin         : 0.000752
+--------------------------------------------------------------------------------
+ DOWNSTREAM COLAB TRAINING SPECIFICATION                                        
+--------------------------------------------------------------------------------
+  - Recommended Epochs         : 2
+  - Recommended Learning Rate  : 2.019667e-06
+  - Sampling Temperature       : 0.4395
+  - Target Deployment Directory: D:\collapse-resistant-training\curriculum_out\generation_2
+================================================================================
