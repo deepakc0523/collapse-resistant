@@ -26,19 +26,35 @@ The pipeline mirrors the Anchor model's architecture to ensure a controlled expe
 - `verify_student.py`: Validation script to ensure all constraints (random init, data source, etc.) are met.
 - `run_student_training.py`: Main entry point to execute the pipeline.
 
-## Usage
+## Controlled Student-2 Experiments (Generation-2)
 
-To run the full training pipeline:
+For Generation-2, we execute two scientifically controlled Student-2 experiments starting from equivalent random initialization (`seed=42`) with identical hyperparameters:
+
+### 1. Student-2 Control Baseline (100% Generation-2 Synthetic Data)
+```bash
+python -m student.run_student_training \
+    --data-dir baseline_out/generation_2 \
+    --output-dir checkpoints/student2_baseline \
+    --experiment-name student2_baseline
+```
+- **Output Checkpoints**: `checkpoints/student2_baseline/`
+
+### 2. Student-2 Proposed Method (75% Human Anchor + 25% Generation-2 Synthetic Data)
+```bash
+python -m student.run_student_training \
+    --data-dir curriculum_out/generation_2 \
+    --output-dir checkpoints/student2_adaptive \
+    --experiment-name student2_adaptive
+```
+- **Output Checkpoints**: `checkpoints/student2_adaptive/`
+
+---
+
+## Verification
+
+To verify experimental constraints, dataset loading, and architecture consistency across both conditions:
 
 ```bash
-python student/run_student_training.py
+python -m student.verify_student
 ```
 
-To verify the pipeline constraints before or after training:
-
-```bash
-python student/verify_student.py
-```
-
-## Google Colab
-This pipeline is designed to execute seamlessly on Google Colab (T4 GPU). It will automatically detect CUDA and utilize Mixed Precision (AMP) if available, falling back to CPU otherwise.

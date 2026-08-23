@@ -14,11 +14,11 @@ from transformers import PreTrainedModel
 def save_model_statistics(
     model: PreTrainedModel,
     save_path: Path,
-    logger: logging.Logger
+    logger: logging.Logger,
+    metadata: Optional[dict] = None,
 ) -> None:
     """
-    Saves statistics about the model, particularly parameter counts, to verify
-    it matches the expected architecture.
+    Saves statistics about the model and training metadata.
     """
     total_params = sum(p.numel() for p in model.parameters())
     trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
@@ -27,9 +27,12 @@ def save_model_statistics(
         "architecture": model.__class__.__name__,
         "total_parameters": total_params,
         "trainable_parameters": trainable_params,
-        "parameter_breakdown": {
-            name: p.numel() for name, p in model.named_parameters()
-        }
+    }
+    if metadata:
+        stats.update(metadata)
+
+    stats["parameter_breakdown"] = {
+        name: p.numel() for name, p in model.named_parameters()
     }
 
     save_path.parent.mkdir(parents=True, exist_ok=True)

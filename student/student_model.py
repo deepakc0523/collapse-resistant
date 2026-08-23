@@ -38,6 +38,8 @@ def load_random_student_model(
         
     # 1. Load the configuration for the architecture (not the weights)
     config = GPT2Config.from_pretrained(model_type)
+    if hasattr(config, "loss_type") and getattr(config, "loss_type") is None:
+        delattr(config, "loss_type")
     
     # 2. Initialize the model with random weights based on the config
     model = GPT2LMHeadModel(config)
