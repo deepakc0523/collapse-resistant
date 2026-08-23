@@ -1,0 +1,32 @@
+================================================================================
+          STUDENT-2 CONTROL BASELINE DATASET REPORT                            
+================================================================================
+ Timestamp           : 2026-08-23 23:50:41
+ Experiment ID       : uncontrolled_recursive_baseline
+ Target Generation   : Generation-2
+ Parent Model        : Generation-1 (Student-1)
+ Synthetic Source    : data/synthetic/generation_2/generation_2_synthetic.jsonl
+--------------------------------------------------------------------------------
+ DATASET MIXING & SIZE SPECIFICATION                                           
+--------------------------------------------------------------------------------
+  - Total Dataset Size         : 993 samples
+  - Training Split Count       : 894 samples (90%)
+  - Validation Split Count     : 99 samples (10%)
+  - Synthetic Data Mix Ratio   : 1.0000 (993 samples)
+  - Anchor Data Mix Ratio      : 0.0000 (0 samples)
+  - Random Seed                : 42 (Deterministic)
+--------------------------------------------------------------------------------
+ DATASET INTEGRITY & VALIDATION                                                 
+--------------------------------------------------------------------------------
+  - Validation Passed          : True
+  - Duplicate Samples Removed  : 7
+  - Empty Records Removed      : 0
+  - Corrupted Records Removed  : 0
+--------------------------------------------------------------------------------
+ EXPERIMENTAL CONTROL CONDITION                                                 
+--------------------------------------------------------------------------------
+  - Condition                  : 100% Uncontrolled Recursive Synthetic Data
+  - Curriculum Applied         : None (No 3-stage progressive schedule)
+  - ATE Policy Applied         : None (No SCRS risk-sensitive mixture)
+  - Target Deployment Directory: D:\collapse-resistant-training\baseline_out\generation_2
+================================================================================

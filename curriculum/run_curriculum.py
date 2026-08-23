@@ -41,10 +41,12 @@ def run_curriculum_pipeline() -> None:
     policy_loader = PolicyLoader(config=config, logger=logger)
     policy_data = policy_loader.load_policy()
 
-    # 2. Load Raw Datasets
+    # 2. Load Raw Datasets (Strict Mode: allow_fallback=False)
     dataset_loader = DatasetLoader(config=config, logger=logger)
-    anchor_records = dataset_loader.load_anchor_dataset(limit=config.total_dataset_size)
-    synthetic_records = dataset_loader.load_synthetic_dataset(limit=config.total_dataset_size)
+    anchor_records = dataset_loader.load_anchor_dataset(limit=config.total_dataset_size, allow_fallback=False)
+    synthetic_records = dataset_loader.load_synthetic_dataset(
+        limit=config.total_dataset_size, allow_fallback=False, required_records=1000
+    )
 
     # 3. Mix Datasets Proportionally
     mixer = DatasetMixer(config=config, logger=logger)

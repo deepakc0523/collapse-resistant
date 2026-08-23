@@ -62,7 +62,9 @@ class CurriculumConfig:
     # --- Inputs ---
     policy_json_path: Path = _PROJECT_ROOT / "adaptive_out" / "adaptive_policy.json"
     anchor_dataset_path: Path = _PROJECT_ROOT / "data" / "processed" / "clean_wikitext.txt"
-    synthetic_dataset_path: Path = _PROJECT_ROOT / "data" / "synthetic" / "generation_1"
+    synthetic_dataset_path: Path = (
+        _PROJECT_ROOT / "data" / "synthetic" / "generation_2" / "generation_2_synthetic.jsonl"
+    )
 
     # --- Output Directories ---
     output_dir: Path = _PROJECT_ROOT / "curriculum_out"

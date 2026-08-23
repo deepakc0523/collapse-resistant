@@ -1,7 +1,7 @@
 ================================================================================
           CURRICULUM CONTROLLER (CC) GENERATION-2 REPORT                        
 ================================================================================
- Timestamp           : 2026-08-21 21:11:14
+ Timestamp           : 2026-08-23 23:43:59
  Target Generation   : Generation-2
  Parent Generation   : Generation-1
  Consumed ATE Policy : adaptive_policy.json
@@ -9,10 +9,10 @@
 --------------------------------------------------------------------------------
  DATASET MIXING & SIZE SPECIFICATION                                           
 --------------------------------------------------------------------------------
-  - Total Dataset Size         : 997 samples
-  - Training Split Count       : 897 samples (90%)
+  - Total Dataset Size         : 998 samples
+  - Training Split Count       : 898 samples (90%)
   - Validation Split Count     : 100 samples (10%)
-  - Synthetic Data Mix Ratio   : 0.2500 (249 samples)
+  - Synthetic Data Mix Ratio   : 0.2500 (250 samples)
   - Anchor Data Mix Ratio      : 0.7500 (748 samples)
   - Random Seed                : 42 (Deterministic)
 --------------------------------------------------------------------------------
@@ -25,10 +25,10 @@
  DATASET INTEGRITY & VALIDATION                                                 
 --------------------------------------------------------------------------------
   - Validation Passed          : True
-  - Duplicate Samples Removed  : 3
+  - Duplicate Samples Removed  : 2
   - Empty Records Removed      : 0
   - Corrupted Records Removed  : 0
-  - Ratio Error Margin         : 0.000752
+  - Ratio Error Margin         : 0.000501
 --------------------------------------------------------------------------------
  DOWNSTREAM COLAB TRAINING SPECIFICATION                                        
 --------------------------------------------------------------------------------

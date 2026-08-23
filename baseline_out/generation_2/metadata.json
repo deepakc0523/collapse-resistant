@@ -1,0 +1,32 @@
+{
+    "experiment": "uncontrolled_recursive_baseline",
+    "generation_id": "generation_2",
+    "source_generation": 2,
+    "parent_student": "generation_1",
+    "synthetic_source": "data/synthetic/generation_2/generation_2_synthetic.jsonl",
+    "synthetic_source_record_count": 1000,
+    "synthetic_ratio": 1.0,
+    "anchor_ratio": 0.0,
+    "creation_time": "2026-08-23T23:50:41.289276",
+    "framework_version": "1.0",
+    "random_seed": 42,
+    "hyperparameters": {
+        "synthetic_ratio": 1.0,
+        "anchor_ratio": 0.0,
+        "curriculum_applied": false,
+        "ate_policy_applied": false
+    },
+    "dataset_sizes": {
+        "total_samples": 993,
+        "train_samples": 894,
+        "val_samples": 99,
+        "synthetic_count": 993,
+        "anchor_count": 0
+    },
+    "validation_summary": {
+        "is_valid": true,
+        "duplicates_removed": 7,
+        "empty_removed": 0,
+        "corrupted_removed": 0
+    }
+}

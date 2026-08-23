@@ -66,6 +66,12 @@ class MetadataGenerator:
             "generation_parent": "generation_1",
             "creation_time": datetime.now().isoformat(),
             "framework_version": "1.0",
+            "synthetic_source": "data/synthetic/generation_2/generation_2_synthetic.jsonl",
+            "synthetic_source_generation": 2,
+            "synthetic_parent_model": "generation_1",
+            "synthetic_source_record_count": 1000,
+            "target_synthetic_ratio": policy_data.synthetic_ratio,
+            "target_anchor_ratio": policy_data.anchor_ratio,
             "hyperparameters": {
                 "synthetic_ratio": policy_data.synthetic_ratio,
                 "anchor_ratio": policy_data.anchor_ratio,

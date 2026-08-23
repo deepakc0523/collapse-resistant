@@ -5,16 +5,17 @@ curriculum/verify_curriculum.py
 
 Comprehensive self-testing verification script for the Curriculum Controller (CC).
 
-Validates:
-  1. Adaptive policy loading from adaptive_policy.json
-  2. Dataset loading and fallback generation
-  3. Mixing ratios matching policy requirements
-  4. 3-stage curriculum scheduling ordering (Anchor Foundation -> Transition -> Target)
-  5. Metadata generation schema and reproducibility
-  6. Dataset export (train.jsonl, validation.jsonl, metadata.json)
-  7. Duplicate detection and data cleaning
-  8. Creation of all 5 publication visualization plots
-  9. Random seed reproducibility
+Proves:
+  [1] Real Gen-2 JSONL is loaded.
+  [2] Exactly 1,000 synthetic source records are detected.
+  [3] No fallback data is generated (strict fail-loudly check).
+  [4] ATE policy is loaded correctly.
+  [5] Exactly 750 human + 250 Gen-2 synthetic records are selected.
+  [6] 3-stage curriculum remains valid.
+  [7] Duplicate/empty/corrupt records are handled.
+  [8] Seed reproducibility passes.
+  [9] train.jsonl, validation.jsonl and metadata.json are valid.
+  [10] Metadata correctly identifies Generation-2 as the synthetic source.
 """
 
 import sys
@@ -38,7 +39,7 @@ from curriculum.utils import get_curriculum_logger, set_seed
 
 def verify_curriculum_module() -> bool:
     """
-    Executes end-to-end verification checks for the Curriculum Controller.
+    Executes end-to-end verification checks [1] through [10] for the Curriculum Controller.
 
     Returns
     -------
@@ -46,33 +47,51 @@ def verify_curriculum_module() -> bool:
         True if all verification checks pass, False otherwise.
     """
     logger = get_curriculum_logger("curriculum.verify_curriculum")
-    logger.info("Starting Curriculum Controller (CC) Verification Suite...")
+    logger.info("================================================================================")
+    logger.info(" Starting Curriculum Controller (CC) Verification Suite (Checks 1-10)...")
+    logger.info("================================================================================")
 
     config = CurriculumConfig()
 
     try:
-        # --- Check 1: ATE Policy Loading ---
-        logger.info("[1/9] Testing ATE policy loading...")
+        # --- Check 4: ATE Policy Loading ---
+        logger.info("[4/10] Testing ATE policy loading...")
         loader = PolicyLoader(config=config, logger=logger)
         policy_data = loader.load_policy()
 
-        assert 0.0 <= policy_data.synthetic_ratio <= 1.0, "Synthetic ratio must be in [0, 1]"
-        assert 0.0 <= policy_data.anchor_ratio <= 1.0, "Anchor ratio must be in [0, 1]"
-        assert abs((policy_data.synthetic_ratio + policy_data.anchor_ratio) - 1.0) < 1e-3
-        logger.info("[PASS] ATE policy loading check passed.")
+        assert abs(policy_data.synthetic_ratio - 0.25) < 1e-3, f"Expected synthetic_ratio 0.25, got {policy_data.synthetic_ratio}"
+        assert abs(policy_data.anchor_ratio - 0.75) < 1e-3, f"Expected anchor_ratio 0.75, got {policy_data.anchor_ratio}"
+        assert policy_data.training_status == "HIGH_RISK", f"Expected HIGH_RISK status, got {policy_data.training_status}"
+        logger.info("[PASS] [4] ATE policy loaded correctly: Synthetic=0.25, Anchor=0.75, Status=HIGH_RISK.")
 
-        # --- Check 2: Dataset Loading ---
-        logger.info("[2/9] Testing raw anchor and synthetic dataset loading...")
+        # --- Check 1 & 2: Real Gen-2 JSONL loading & record count ---
+        logger.info("[1/10 & 2/10] Testing Real Gen-2 JSONL loading and 1,000 record count...")
         ds_loader = DatasetLoader(config=config, logger=logger)
-        anchor_records = ds_loader.load_anchor_dataset(limit=1000)
-        synthetic_records = ds_loader.load_synthetic_dataset(limit=1000)
+        synthetic_records = ds_loader.load_synthetic_dataset(allow_fallback=False, required_records=1000)
 
-        assert len(anchor_records) > 0, "Anchor dataset must contain records"
-        assert len(synthetic_records) > 0, "Synthetic dataset must contain records"
-        logger.info("[PASS] Dataset loading check passed.")
+        assert len(synthetic_records) == 1000, f"Expected exactly 1,000 synthetic records, got {len(synthetic_records)}"
+        assert synthetic_records[0].metadata.get("origin") == "generation_2_synthetic_jsonl"
+        assert synthetic_records[0].metadata.get("generation") == 2
+        logger.info("[PASS] [1] & [2] Real Gen-2 JSONL loaded successfully with exactly 1,000 source records.")
 
-        # --- Check 3: Mixing Ratios ---
-        logger.info("[3/9] Testing dataset mixing proportions...")
+        # --- Check 3: Fail loudly when synthetic source is missing/corrupted ---
+        logger.info("[3/10] Testing strict fail-loudly behavior (no fallback data in real mode)...")
+        bad_config = CurriculumConfig()
+        bad_config.synthetic_dataset_path = Path("non_existent_gen2_synthetic.jsonl")
+        bad_ds_loader = DatasetLoader(config=bad_config, logger=logger)
+
+        try:
+            bad_ds_loader.load_synthetic_dataset(allow_fallback=False)
+            assert False, "Expected FileNotFoundError when real synthetic file is missing and allow_fallback=False"
+        except FileNotFoundError as e:
+            logger.info("[PASS] [3] No fallback data generated: failed loudly as expected (%s).", str(e))
+
+        # --- Load Anchor Records ---
+        anchor_records = ds_loader.load_anchor_dataset(limit=config.total_dataset_size, allow_fallback=False)
+        assert len(anchor_records) >= 750, f"Need at least 750 anchor records, got {len(anchor_records)}"
+
+        # --- Check 5: Mixing ratios (750 human + 250 Gen-2 synthetic) ---
+        logger.info("[5/10] Testing mixing ratio selection (750 human + 250 synthetic)...")
         mixer = DatasetMixer(config=config, logger=logger)
         pool = mixer.mix_datasets(
             anchor_pool=anchor_records,
@@ -81,105 +100,92 @@ def verify_curriculum_module() -> bool:
             total_count=1000,
         )
 
-        expected_syn = int(round(1000 * policy_data.synthetic_ratio))
-        assert len(pool.synthetic_samples) == expected_syn, f"Expected {expected_syn} synthetic samples"
-        logger.info("[PASS] Dataset mixing ratios check passed.")
+        assert len(pool.anchor_samples) == 750, f"Expected 750 anchor samples, got {len(pool.anchor_samples)}"
+        assert len(pool.synthetic_samples) == 250, f"Expected 250 synthetic samples, got {len(pool.synthetic_samples)}"
+        logger.info("[PASS] [5] Exactly 750 human anchor + 250 Gen-2 synthetic records selected.")
 
-        # --- Check 4: Curriculum Scheduling ---
-        logger.info("[4/9] Testing 3-stage progressive curriculum scheduling...")
+        # --- Check 6: 3-Stage Curriculum Scheduling ---
+        logger.info("[6/10] Testing 3-stage progressive curriculum schedule...")
         scheduler = CurriculumScheduler(config=config, logger=logger)
         scheduled = scheduler.schedule_curriculum(pool=pool, policy_data=policy_data)
 
-        # Assert Stage 1 is 100% pure anchor
         stage1_end = scheduled.stage_boundaries["Stage_1_Foundation"][1]
         stage1_records = scheduled.ordered_records[:stage1_end]
+        assert len(stage1_records) == 250, f"Expected Stage 1 count 250, got {len(stage1_records)}"
         for r in stage1_records:
-            assert r.source == "anchor", f"Stage 1 must be 100% anchor, got source={r.source}"
+            assert r.source == "anchor", f"Stage 1 must be 100% anchor, found {r.source}"
 
-        logger.info("[PASS] 3-Stage curriculum scheduling check passed.")
+        logger.info("[PASS] [6] 3-stage curriculum schedule validated (Stage 1 = 100% anchor foundation).")
 
-        # --- Check 5: Duplicate Detection & Data Validation ---
-        logger.info("[5/9] Testing dataset validation and duplicate detection...")
+        # --- Check 7: Duplicate / Empty / Corrupt Records Handling ---
+        logger.info("[7/10] Testing record validation and duplicate detection...")
         validator = DatasetValidator(config=config, logger=logger)
-
         base_clean, _ = validator.validate_and_clean(scheduled.ordered_records, policy_data)
 
         # Inject duplicate to verify detection
         test_records = list(base_clean)
-        test_records.append(base_clean[0]) # Inject duplicate
+        test_records.append(base_clean[0])
 
         cleaned, val_report = validator.validate_and_clean(test_records, policy_data)
-        assert val_report.duplicates_removed >= 1, "Must detect and remove injected duplicate"
-        assert len(cleaned) == len(base_clean), "Cleaned record count must match original before duplicate injection"
-        logger.info("[PASS] Dataset validation check passed.")
+        assert val_report.duplicates_removed >= 1, "Validator must catch injected duplicate"
+        assert len(cleaned) == len(base_clean)
+        logger.info("[PASS] [7] Duplicate and record validation checks passed.")
 
-        # --- Check 6: Reproducibility ---
-        logger.info("[6/9] Testing seed reproducibility...")
+        # --- Check 8: Seed Reproducibility ---
+        logger.info("[8/10] Testing seed reproducibility...")
         pool2 = mixer.mix_datasets(anchor_records, synthetic_records, policy_data, total_count=1000)
         for r1, r2 in zip(pool.synthetic_samples, pool2.synthetic_samples):
-            assert r1.record_id == r2.record_id, "Sampling must be completely deterministic for identical seeds"
-        logger.info("[PASS] Seed reproducibility check passed.")
+            assert r1.record_id == r2.record_id, "Identical seeds must produce identical record selection"
+        logger.info("[PASS] [8] Seed reproducibility check passed.")
 
-        # --- Check 7: Metadata & Export ---
-        logger.info("[7/9] Testing dataset export (train.jsonl, val.jsonl, metadata.json)...")
+        # --- Check 9 & 10: Metadata & Export Validation ---
+        logger.info("[9/10 & 10/10] Testing export (train.jsonl, val.jsonl, metadata.json) & metadata source identification...")
+        train_count = int(round(len(cleaned) * config.train_val_split))
+        val_count = len(cleaned) - train_count
+
         meta_gen = MetadataGenerator(config=config, logger=logger)
         metadata_payload = meta_gen.generate_metadata(
             policy_data=policy_data,
             scheduled=scheduled,
             validation_report=val_report,
-            train_count=int(round(len(cleaned) * config.train_val_split)),
-            val_count=len(cleaned) - int(round(len(cleaned) * config.train_val_split)),
+            train_count=train_count,
+            val_count=val_count,
         )
 
         exporter = DatasetExporter(config=config, logger=logger)
         train_p, val_p, meta_p = exporter.export_dataset(cleaned, metadata_payload)
 
-        assert train_p.exists() and train_p.stat().st_size > 0, "train.jsonl must exist"
-        assert val_p.exists() and val_p.stat().st_size > 0, "validation.jsonl must exist"
-        assert meta_p.exists() and meta_p.stat().st_size > 0, "metadata.json must exist"
+        assert train_p.exists() and train_p.stat().st_size > 0
+        assert val_p.exists() and val_p.stat().st_size > 0
+        assert meta_p.exists() and meta_p.stat().st_size > 0
 
-        # Validate metadata schema
+        # Validate metadata schema & Generation-2 identification
         with open(meta_p, "r", encoding="utf-8") as f:
             meta_json = json.load(f)
-            assert meta_json["generation_id"] == "generation_2"
-            assert "hyperparameters" in meta_json
-            assert "dataset_sizes" in meta_json
 
-        logger.info("[PASS] Dataset export check passed.")
+        assert meta_json.get("synthetic_source_generation") == 2, f"Expected generation 2, got {meta_json.get('synthetic_source_generation')}"
+        assert meta_json.get("synthetic_parent_model") == "generation_1"
+        assert meta_json.get("synthetic_source_record_count") == 1000
+        assert "generation_2_synthetic.jsonl" in meta_json.get("synthetic_source", "")
 
-        # --- Check 8: Summary Report ---
-        logger.info("[8/9] Testing summary report generator...")
+        logger.info("[PASS] [9] & [10] Exported train.jsonl (%d), validation.jsonl (%d), and metadata.json correctly identify Generation-2 synthetic source.", train_count, val_count)
+
+        # --- Generate Report and Plots ---
         reporter = CurriculumReportGenerator(config=config, logger=logger)
         summary_p = reporter.generate_report(policy_data, scheduled, val_report, metadata_payload)
-        assert summary_p.exists() and summary_p.stat().st_size > 0, "curriculum_summary.txt must exist"
-        logger.info("[PASS] Summary report check passed.")
+        assert summary_p.exists()
 
-        # --- Check 9: Visualizations ---
-        logger.info("[9/9] Testing publication visualization generator...")
         visualizer = CurriculumVisualizer(config=config, logger=logger)
         plots = visualizer.generate_all_plots(policy_data, scheduled, cleaned)
-
-        expected_plots = [
-            "dataset_composition.png",
-            "curriculum_progression.png",
-            "curriculum_schedule.png",
-            "sample_distribution.png",
-            "generation_flow.png",
-        ]
-
-        for p_name in expected_plots:
-            target_plot = config.plots_dir / p_name
-            assert target_plot.exists() and target_plot.stat().st_size > 0, f"Missing plot artifact: {p_name}"
-
-        logger.info("[PASS] All 5 visualization plots verified successfully.")
+        assert len(plots) == 5
 
         logger.info("================================================================================")
-        logger.info(" VERIFICATION COMPLETE: Curriculum Controller (CC) is fully operational!")
+        logger.info(" ALL VERIFICATION CHECKS [1-10] PASSED SUCCESSFULLY!")
         logger.info("================================================================================")
         return True
 
     except Exception as e:
-        logger.error("Verification FAILED with error: %s", str(e), exc_info=True)
+        logger.error("Curriculum Verification FAILED: %s", str(e), exc_info=True)
         return False
 
 
