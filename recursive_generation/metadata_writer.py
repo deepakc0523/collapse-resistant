@@ -61,6 +61,11 @@ class MetadataWriter:
             "checkpoint_used": str(cfg.student_checkpoint_path),
             "generation_number": cfg.generation_number,
             "parent_student": cfg.parent_student,
+            "source_dataset": str(cfg.prefix_dataset_path),
+            "max_prompts": cfg.max_prompts,
+            "random_seed": cfg.random_seed,
+            "available_prefix_count": stats.get("available_prefix_count", stats.get("total_prefixes", 0)),
+            "selected_prefix_count": stats.get("selected_prefix_count", stats.get("total_prefixes", 0)),
             "sampling_strategy": {
                 "temperature": cfg.temperature,
                 "top_p": cfg.top_p,
@@ -113,6 +118,8 @@ class MetadataWriter:
         cfg = self.config
         out_path = cfg.summary_txt_path
         total = stats.get("total_prefixes", 0)
+        avail = stats.get("available_prefix_count", total)
+        selected = stats.get("selected_prefix_count", total)
         success = stats.get("successful_generations", 0)
         failed = stats.get("failed_generations", 0)
         success_rate = success / max(1, total) * 100
@@ -124,8 +131,13 @@ class MetadataWriter:
             f" Generation Timestamp  : {run_start_time}",
             f" Completion Timestamp  : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             f" Checkpoint Used       : {cfg.student_checkpoint_path}",
+            f" Source Dataset        : {cfg.prefix_dataset_path}",
             f" Generation Number     : {cfg.generation_number}",
             f" Parent Student        : {cfg.parent_student}",
+            f" Max Prompts           : {cfg.max_prompts}",
+            f" Available Prefixes    : {avail}",
+            f" Selected Prefixes     : {selected}",
+            f" Random Seed           : {cfg.random_seed}",
             "--------------------------------------------------------------------------------",
             " GENERATION STATISTICS                                                          ",
             "--------------------------------------------------------------------------------",

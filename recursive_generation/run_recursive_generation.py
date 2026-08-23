@@ -66,7 +66,7 @@ def run_recursive_generation() -> None:
         resume_manager=resume_mgr,
         logger=logger,
     )
-    stats = gen.generate_all(prefixes)
+    stats = gen.generate_all(prefixes, available_prefix_count=prefix_loader.available_prefix_count)
 
     # 6. Write metadata and summary
     writer = MetadataWriter(config=config, logger=logger)

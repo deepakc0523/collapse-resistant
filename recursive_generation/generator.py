@@ -60,6 +60,7 @@ class SyntheticGenerator:
         self,
         prefixes: List[PrefixRecord],
         output_path: Optional[Path] = None,
+        available_prefix_count: Optional[int] = None,
     ) -> Dict[str, Any]:
         """
         Main generation loop: processes all prefixes in batches, writes output JSONL.
@@ -70,6 +71,8 @@ class SyntheticGenerator:
             Ordered list of prefix records.
         output_path : Optional[Path]
             Override JSONL output path. Uses config path if None.
+        available_prefix_count : Optional[int]
+            Total available prefixes prior to sampling.
 
         Returns
         -------
@@ -79,12 +82,25 @@ class SyntheticGenerator:
         out_path = output_path or self.config.output_jsonl_path
         out_path.parent.mkdir(parents=True, exist_ok=True)
 
+        avail_count = available_prefix_count if available_prefix_count is not None else len(prefixes)
+
+        # Generator safety guard: never process more than cfg.max_prompts
+        if self.config.max_prompts is not None and len(prefixes) > self.config.max_prompts:
+            self.logger.warning(
+                "Safety guard activated: truncating %d input prefixes to max_prompts (%d).",
+                len(prefixes),
+                self.config.max_prompts,
+            )
+            prefixes = prefixes[: self.config.max_prompts]
+
+        selected_count = len(prefixes)
+
         # Load resume state — skip already-completed indices
         completed_indices = self.resume_manager.load_state()
         pending = [p for p in prefixes if p.index not in completed_indices]
 
         self.logger.info(
-            "Starting Generation-2 synthesis: %d total prefixes | %d pending | %d already completed",
+            "Starting Generation-2 synthesis: %d selected prefixes | %d pending | %d already completed",
             len(prefixes),
             len(pending),
             len(completed_indices),
@@ -151,6 +167,9 @@ class SyntheticGenerator:
 
         stats = {
             "total_prefixes": total_prefixes,
+            "available_prefix_count": avail_count,
+            "selected_prefix_count": selected_count,
+            "max_prompts": self.config.max_prompts,
             "successful_generations": successful,
             "failed_generations": failed,
             "average_output_char_length": round(avg_out_len, 2),

@@ -122,6 +122,7 @@ class GenerationConfig:
     # --- Batching & Prefix ---
     batch_size: int = 8
     max_prefix_tokens: int = 64
+    max_prompts: int = 1000
     random_seed: int = 42
 
     # --- Checkpointing ---

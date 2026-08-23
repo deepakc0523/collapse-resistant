@@ -12,6 +12,7 @@ on the same anchors, not fresh random prompts.
 """
 
 import logging
+import random
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional
@@ -52,15 +53,20 @@ class PrefixLoader:
     ) -> None:
         self.config = config or GenerationConfig()
         self.logger = logger or get_generation_logger("recursive_generation.prefix_loader")
+        self.available_prefix_count: int = 0
+        self.selected_prefix_count: int = 0
 
     def load_prefixes(
         self,
         path: Optional[Path] = None,
         min_length: int = 30,
+        max_prompts: Optional[int] = None,
+        seed: Optional[int] = None,
         limit: Optional[int] = None,
     ) -> List[PrefixRecord]:
         """
-        Reads clean_wikitext.txt and extracts non-trivial lines as generation prompts.
+        Reads clean_wikitext.txt, extracts valid non-trivial lines, and deterministically
+        samples up to max_prompts prefixes while preserving relative corpus order.
 
         Parameters
         ----------
@@ -68,15 +74,26 @@ class PrefixLoader:
             Override path. Uses config path if None.
         min_length : int
             Minimum character length for a valid prefix. Filters headings and noise.
+        max_prompts : Optional[int]
+            Maximum number of prefixes to sample deterministically. None = use config.
+        seed : Optional[int]
+            Random seed for deterministic sampling. None = use config.
         limit : Optional[int]
-            Maximum number of prefixes to load. None = all.
+            Legacy alias for max_prompts.
 
         Returns
         -------
         List[PrefixRecord]
-            Ordered list of prefix records.
+            Ordered list of prefix records after deterministic sampling.
         """
         target_path = path or self.config.prefix_dataset_path
+        target_max_prompts = (
+            max_prompts
+            if max_prompts is not None
+            else (limit if limit is not None else self.config.max_prompts)
+        )
+        target_seed = seed if seed is not None else self.config.random_seed
+
         self.logger.info("Loading prefix dataset from: %s", target_path)
 
         if not target_path.exists():
@@ -85,7 +102,7 @@ class PrefixLoader:
                 "Ensure data preprocessing has been completed."
             )
 
-        records: List[PrefixRecord] = []
+        all_valid_lines: List[str] = []
         seen: set = set()
 
         with open(target_path, "r", encoding="utf-8", errors="replace") as f:
@@ -96,21 +113,33 @@ class PrefixLoader:
                 if line in seen:
                     continue
                 seen.add(line)
+                all_valid_lines.append(line)
 
-                records.append(
-                    PrefixRecord(
-                        text=line,
-                        index=len(records),
-                        char_length=len(line),
-                    )
-                )
+        self.available_prefix_count = len(all_valid_lines)
 
-                if limit is not None and len(records) >= limit:
-                    break
+        if target_max_prompts is not None and self.available_prefix_count > target_max_prompts:
+            rng = random.Random(target_seed)
+            sampled_indices = sorted(rng.sample(range(self.available_prefix_count), target_max_prompts))
+            selected_lines = [all_valid_lines[i] for i in sampled_indices]
+        else:
+            selected_lines = all_valid_lines
+
+        records: List[PrefixRecord] = [
+            PrefixRecord(
+                text=line,
+                index=i,
+                char_length=len(line),
+            )
+            for i, line in enumerate(selected_lines)
+        ]
+
+        self.selected_prefix_count = len(records)
 
         self.logger.info(
-            "Loaded %d valid prefixes from corpus (min_length=%d).",
-            len(records),
-            min_length,
+            "Loaded %d valid prefixes from corpus (total available=%d, max_prompts=%s, seed=%d).",
+            self.selected_prefix_count,
+            self.available_prefix_count,
+            str(target_max_prompts),
+            target_seed,
         )
         return records

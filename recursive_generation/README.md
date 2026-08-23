@@ -58,6 +58,12 @@ recursive_generation/
 └── README.md
 ```
 
+### Controlled Generation-2 Experiment
+
+To maintain rigorous experimental control and comparability, Generation-2 synthesis is limited to **exactly 1,000 deterministically sampled prefixes** (`max_prompts = 1000`) from the canonical `clean_wikitext.txt` corpus. 
+
+The `PrefixLoader` loads all valid human anchor prefixes, applies deduplication, and deterministically samples 1,000 prefixes using `random_seed = 42` while preserving their original relative sequential order in the corpus.
+
 ---
 
 ## 3. Output Specification (`recursive_generation_out/generation_2/`)
@@ -84,8 +90,13 @@ recursive_generation/
 | Field | Description |
 |---|---|
 | `checkpoint_used` | Path to student model checkpoint |
+| `source_dataset` | Path to anchor human prefix dataset |
 | `generation_number` | Integer generation ID (2) |
 | `parent_student` | `"generation_1"` |
+| `max_prompts` | Deterministic prompt limit (`1000`) |
+| `random_seed` | Random seed for sampling (`42`) |
+| `available_prefix_count` | Total valid prefixes in source corpus |
+| `selected_prefix_count` | Number of prefixes selected for synthesis |
 | `sampling_strategy` | All generation hyperparameters |
 | `seed` | Random seed |
 | `total_prompts` | Number of prefix inputs |
