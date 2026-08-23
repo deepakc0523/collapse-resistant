@@ -9,6 +9,7 @@ Handles logging model statistics (parameters) and saving the training history.
 import json
 from pathlib import Path
 import logging
+from typing import Optional
 from transformers import PreTrainedModel
 
 def save_model_statistics(
