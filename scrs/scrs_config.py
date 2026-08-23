@@ -10,6 +10,7 @@ normalization bounds, and risk category levels.
 """
 
 from pathlib import Path
+from typing import Dict, Tuple, List, Optional
 from dataclasses import dataclass, field
 from typing import Dict, Tuple, List
 
