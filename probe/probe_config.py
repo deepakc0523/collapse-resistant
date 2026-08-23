@@ -50,6 +50,32 @@ class ProbeConfig:
     # Layers to extract (DistilGPT2 has layers 0 to 5, total 6)
     num_layers: int = 6
     
+    def update_paths(
+        self,
+        output_dir: Optional[Path] = None,
+        student_model_path: Optional[Path] = None,
+        anchor_model_path: Optional[Path] = None,
+        dataset_source: Optional[Path] = None,
+    ) -> None:
+        """Dynamically update paths for custom evaluation runs."""
+        if student_model_path is not None:
+            self.student_model_path = Path(student_model_path)
+        if anchor_model_path is not None:
+            self.anchor_model_path = Path(anchor_model_path)
+        if dataset_source is not None:
+            self.dataset_source = Path(dataset_source)
+        if output_dir is not None:
+            self.output_dir = Path(output_dir)
+            self.plots_dir = self.output_dir / "plots"
+            self.metrics_dir = self.output_dir / "metrics"
+            self.logs_dir = self.output_dir / "logs"
+            self.report_json_path = self.output_dir / "representation_drift_report.json"
+            self.summary_txt_path = self.output_dir / "representation_summary.txt"
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            self.plots_dir.mkdir(parents=True, exist_ok=True)
+            self.metrics_dir.mkdir(parents=True, exist_ok=True)
+            self.logs_dir.mkdir(parents=True, exist_ok=True)
+
     def __post_init__(self) -> None:
         """Create necessary directories after initialization."""
         self.output_dir.mkdir(parents=True, exist_ok=True)

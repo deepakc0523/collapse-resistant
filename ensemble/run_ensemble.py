@@ -42,11 +42,22 @@ from .variance_report import compile_variance_report
 from .visualization import generate_visualizations
 
 
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Ensemble Variance Monitor (EVM)")
+    parser.add_argument("--student-model-path", type=Path, default=None, help="Path to student model checkpoint")
+    parser.add_argument("--dataset-source", type=Path, default=None, help="Path to prompt source dataset")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Path to output directory for ensemble artifacts")
+    parser.add_argument("--experiment-name", type=str, default=None, help="Experiment identifier name")
+    return parser.parse_args()
+
 @timed_action("Ensemble Variance Monitor Pipeline", logger)
 def main() -> None:
     """Runs the complete EVM uncertainty measurement pipeline."""
 
     setup_utf8_terminal()
+    args = parse_args()
 
     logger.info("=" * 80)
     logger.info("STARTING ENSEMBLE VARIANCE MONITOR (EVM)")
@@ -58,6 +69,11 @@ def main() -> None:
     # ------------------------------------------------------------------
     logger.info("[Step 1/8] Loading EVM configuration...")
     config = EnsembleConfig()
+    config.update_paths(
+        output_dir=args.output_dir,
+        student_model_path=args.student_model_path,
+        dataset_source=args.dataset_source,
+    )
 
     logger.info("  Student model : %s", config.student_model_path)
     logger.info("  Dataset       : %s", config.dataset_source)

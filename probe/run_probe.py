@@ -31,10 +31,22 @@ from .logit_analysis import analyze_logits
 from .drift_report import compute_layer_wise_similarities, compile_drift_report
 from .visualization import generate_visualizations
 
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Representation Drift Analysis Framework (PRDAF)")
+    parser.add_argument("--student-model-path", type=Path, default=None, help="Path to student model checkpoint")
+    parser.add_argument("--anchor-model-path", type=Path, default=None, help="Path to frozen anchor model checkpoint")
+    parser.add_argument("--dataset-source", type=Path, default=None, help="Path to wikitext prompt source dataset")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Path to output directory for probe artifacts")
+    parser.add_argument("--experiment-name", type=str, default=None, help="Experiment identifier name")
+    return parser.parse_args()
+
 @timed_action("Representation Drift Analysis Pipeline", logger)
 def main() -> None:
     """Orchestrates the scientific drift measurement suite."""
     setup_utf8_terminal()
+    args = parse_args()
     
     logger.info("=" * 80)
     logger.info("STARTING REPRESENTATION DRIFT ANALYSIS FRAMEWORK (PRDAF)")
@@ -42,6 +54,12 @@ def main() -> None:
     
     # 1. Load Configurations
     config = ProbeConfig()
+    config.update_paths(
+        output_dir=args.output_dir,
+        student_model_path=args.student_model_path,
+        anchor_model_path=args.anchor_model_path,
+        dataset_source=args.dataset_source,
+    )
     
     # 2. Select Hardware Device
     device = select_device(config.device, logger)

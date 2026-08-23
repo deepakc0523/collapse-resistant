@@ -110,6 +110,27 @@ class SCRSConfig:
         ]
     )
 
+    def update_paths(
+        self,
+        output_dir: Optional[Path] = None,
+        probe_report_path: Optional[Path] = None,
+        ensemble_report_path: Optional[Path] = None,
+    ) -> None:
+        """Dynamically update input and output paths for custom SCRS evaluation runs."""
+        if probe_report_path is not None:
+            self.probe_report_path = Path(probe_report_path)
+        if ensemble_report_path is not None:
+            self.ensemble_report_path = Path(ensemble_report_path)
+        if output_dir is not None:
+            self.output_dir = Path(output_dir)
+            self.plots_dir = self.output_dir / "plots"
+            self.report_json_path = self.output_dir / "scrs_report.json"
+            self.summary_txt_path = self.output_dir / "scrs_summary.txt"
+            self.output_dir.mkdir(parents=True, exist_ok=True)
+            self.plots_dir.mkdir(parents=True, exist_ok=True)
+            self.report_json_path.parent.mkdir(parents=True, exist_ok=True)
+            self.summary_txt_path.parent.mkdir(parents=True, exist_ok=True)
+
     def __post_init__(self) -> None:
         """Ensure directories exist and validate configurations."""
         self.output_dir.mkdir(parents=True, exist_ok=True)

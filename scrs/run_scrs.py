@@ -20,9 +20,20 @@ from scrs.visualization import SCRSVisualizer
 from scrs.utils import get_scrs_logger, setup_utf8_terminal
 
 
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Synthetic Collapse Risk Score (SCRS) Engine")
+    parser.add_argument("--probe-report-path", type=Path, default=None, help="Path to upstream probe report JSON")
+    parser.add_argument("--ensemble-report-path", type=Path, default=None, help="Path to upstream ensemble report JSON")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Path to output directory for SCRS artifacts")
+    parser.add_argument("--experiment-name", type=str, default=None, help="Experiment identifier name")
+    return parser.parse_args()
+
 def main() -> None:
     """Main execution entrypoint."""
     setup_utf8_terminal()
+    args = parse_args()
     logger = get_scrs_logger("scrs.run_scrs")
 
     logger.info("================================================================================")
@@ -30,6 +41,11 @@ def main() -> None:
     logger.info("================================================================================")
 
     config = SCRSConfig()
+    config.update_paths(
+        output_dir=args.output_dir,
+        probe_report_path=args.probe_report_path,
+        ensemble_report_path=args.ensemble_report_path,
+    )
     engine = SCRSEngine(config, logger=logger)
 
     # 1. Execute Fusion Pipeline
