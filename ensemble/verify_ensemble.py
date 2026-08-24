@@ -74,15 +74,31 @@ def _check_range(value: float, name: str, low: float = 0.0, high: float = 1.0) -
         )
 
 
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Sanity-checker for Ensemble Variance Monitor (EVM)")
+    parser.add_argument("--student-model-path", type=Path, default=None, help="Path to student model checkpoint")
+    parser.add_argument("--dataset-source", type=Path, default=None, help="Path to prompt source dataset")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Path to output directory for verification artifacts")
+    return parser.parse_args()
+
+
 def run_verification() -> None:
     """Executes all nine verification phases against the EVM pipeline."""
     setup_utf8_terminal()
+    args = parse_args()
 
     logger.info("=" * 80)
     logger.info("ENSEMBLE VARIANCE MONITOR (EVM) — VERIFICATION SUITE")
     logger.info("=" * 80)
 
     config = EnsembleConfig()
+    config.update_paths(
+        output_dir=args.output_dir,
+        student_model_path=args.student_model_path,
+        dataset_source=args.dataset_source,
+    )
 
     # Redirect all verification outputs to a dedicated subdirectory
     config.output_dir      = config.output_dir / "verify"
@@ -95,6 +111,8 @@ def run_verification() -> None:
     config.max_prompts     = 1
     config.batch_size      = 1
     config.mc_dropout_passes = 5
+
+    logger.info("Verifying Student model at: %s", config.student_model_path)
 
     try:
         # ------------------------------------------------------------------
