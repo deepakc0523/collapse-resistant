@@ -1,0 +1,78 @@
+================================================================================
+ENSEMBLE VARIANCE MONITOR (EVM) — PREDICTION UNCERTAINTY REPORT
+================================================================================
+Timestamp       : 2026-08-24T05:44:40.317661+00:00
+Module          : EVM
+Framework Ver.  : 1.0
+
+CONFIGURATION
+----------------------------------------
+  Student Model : /content/drive/MyDrive/collapse-resistant-assets/student2/baseline/best
+  Dataset Source: Verification Test Prompt
+  Prompts       : 1
+  Batch Size    : 1
+  MC Passes     : 5
+  Top-k         : 5
+  Device        : cuda
+  Random Seed   : 42
+
+================================================================================
+AGGREGATE UNCERTAINTY METRICS  (all values normalised to [0, 1])
+================================================================================
+
+1. PREDICTIVE ENTROPY
+----------------------------------------
+   Mean : 0.983929
+   Std  : 0.000000
+   Note : 0 = maximally confident | 1 = maximally uncertain
+
+2. TOP-1 CONFIDENCE
+----------------------------------------
+   Mean : 0.002896
+   Std  : 0.000000
+   Note : Probability assigned to the most likely token
+
+3. TOP-5 CONFIDENCE SPREAD
+----------------------------------------
+   Mean : 0.002479
+   Std  : 0.000000
+   Note : Difference between rank-1 and rank-5 probabilities
+
+4. PROBABILITY VARIANCE
+----------------------------------------
+   Mean : 0.000006
+   Std  : 0.000000
+   Note : Normalised variance of top-k distribution sharpness
+
+5. CONFIDENCE MARGIN
+----------------------------------------
+   Mean : 0.001949
+   Std  : 0.000000
+   Note : Gap between top-1 and top-2 probabilities (0 = confused)
+
+6. MONTE-CARLO DROPOUT CONSISTENCY
+----------------------------------------
+   Mean : 0.989744
+   Std  : 0.000000
+   Note : Fraction of MC passes agreeing with majority vote
+
+================================================================================
+PER-PROMPT BREAKDOWN  (1 prompts)
+================================================================================
+ IDX    ENTROPY       TOP1     SPREAD        VAR     MARGIN    MC_CONS
+----------------------------------------------------------------------
+   0   0.983929   0.002896   0.002479   0.000006   0.001949   0.989744
+
+================================================================================
+SCIENTIFIC INTERPRETATION
+================================================================================
+- Predictive Entropy and Top-1 Confidence are complementary: high entropy
+  corresponds to low confidence and vice versa.
+- Confidence Margin is a sharper signal than entropy — a near-zero margin
+  means the model is confused between exactly two tokens.
+- Probability Variance captures the shape of the top-k distribution —
+  high variance implies a peaked (confident) distribution.
+- MC Dropout Consistency measures epistemic uncertainty: low consistency
+  indicates the model's predictions are sensitive to dropout masking,
+  implying the model has not fully committed to a representation.
+================================================================================

@@ -1,0 +1,52 @@
+{
+    "metadata": {
+        "title": "Ensemble Variance Monitor (EVM) \u2014 Prediction Uncertainty Report",
+        "module": "evm",
+        "framework_version": "1.0",
+        "timestamp": "2026-08-24T05:44:40.317661+00:00",
+        "description": "Measures the Student model's prediction uncertainty using six calibrated metrics. All metrics are normalized to [0, 1]. This report is a direct upstream input to SCRS.",
+        "configurations": {
+            "student_model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/baseline/best",
+            "dataset_source": "Verification Test Prompt",
+            "max_prompts": 1,
+            "batch_size": 1,
+            "mc_dropout_passes": 5,
+            "top_k_confidence": 5,
+            "device": "cuda",
+            "random_seed": 42
+        },
+        "normalization_notes": {
+            "predictive_entropy": "Shannon entropy H(p) = -sum_v p_v*log(p_v), normalized by log(vocab_size) to [0, 1]. Value 1 = maximum uncertainty (uniform distribution). Value 0 = maximum confidence (degenerate distribution).",
+            "top1_confidence": "Maximum probability max_v p_v. Native probability in [0, 1]. Value 1 = model places all mass on one token. Value 0 = model places essentially no mass on any single token.",
+            "top5_confidence_spread": "Difference p_(1) - p_(5) between rank-1 and rank-5 probabilities. Both are probabilities so difference is in [0, 1]. Large value = mass concentrated at top. Small value = flat distribution.",
+            "probability_variance": "Sample variance of top-k probabilities, normalized by the theoretical maximum variance (1/k)(1-1/k) for a k-item distribution. Range [0, 1]. High value = peaked/confident. Low value = flat/uncertain.",
+            "confidence_margin": "Difference p_(1) - p_(2) between rank-1 and rank-2 probabilities. Both are probabilities so difference is in [0, 1]. Large margin = model strongly prefers one token. Near zero = confusion.",
+            "mc_dropout_consistency": "Fraction of MC Dropout passes agreeing with the majority-vote prediction, averaged over token positions. Range [0, 1]. Value 1 = all passes agree (stable). Value 0 = all passes disagree (unstable)."
+        }
+    },
+    "aggregate_metrics": {
+        "mean_predictive_entropy": 0.9839290976524353,
+        "std_predictive_entropy": 0.0,
+        "mean_top1_confidence": 0.0028957538306713104,
+        "std_top1_confidence": 0.0,
+        "mean_top5_confidence_spread": 0.002479296876117587,
+        "std_top5_confidence_spread": 0.0,
+        "mean_probability_variance": 6.209590083017247e-06,
+        "std_probability_variance": 0.0,
+        "mean_confidence_margin": 0.0019493111176416278,
+        "std_confidence_margin": 0.0,
+        "mean_mc_dropout_consistency": 0.9897435897435898,
+        "std_mc_dropout_consistency": 0.0
+    },
+    "per_prompt_metrics": [
+        {
+            "prompt_index": 0,
+            "predictive_entropy": 0.9839290976524353,
+            "top1_confidence": 0.0028957538306713104,
+            "top5_confidence_spread": 0.002479296876117587,
+            "probability_variance": 6.209590083017247e-06,
+            "confidence_margin": 0.0019493111176416278,
+            "mc_dropout_consistency": 0.9897435897435898
+        }
+    ]
+}

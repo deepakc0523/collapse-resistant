@@ -1,0 +1,89 @@
+{
+    "overall_scrs": 0.8071751916286813,
+    "risk_label": "Critical",
+    "group_risks": {
+        "representation_risk": 0.7863475763037282,
+        "uncertainty_risk": 0.8384166146161112
+    },
+    "configured_weights": {
+        "group_weights": {
+            "representation_group": 0.6,
+            "uncertainty_group": 0.4
+        },
+        "representation_metric_weights": {
+            "hidden_state_drift": 0.16666666666666666,
+            "embedding_drift": 0.16666666666666666,
+            "attention_drift": 0.16666666666666666,
+            "kl_divergence": 0.16666666666666666,
+            "js_divergence": 0.16666666666666666,
+            "prediction_agreement": 0.16666666666666666
+        },
+        "uncertainty_metric_weights": {
+            "predictive_entropy": 0.16666666666666666,
+            "top1_confidence": 0.16666666666666666,
+            "top5_spread": 0.16666666666666666,
+            "probability_variance": 0.16666666666666666,
+            "confidence_margin": 0.16666666666666666,
+            "mc_dropout_consistency": 0.16666666666666666
+        }
+    },
+    "normalized_metrics": {
+        "representation_group": {
+            "hidden_state_drift": 0.9832373231391783,
+            "embedding_drift": 0.994946938403882,
+            "attention_drift": 0.5121073698004086,
+            "kl_divergence": 0.6344651549012511,
+            "js_divergence": 0.6166386948876725,
+            "prediction_agreement": 0.9766899766899767
+        },
+        "uncertainty_group": {
+            "predictive_entropy": 0.9837011730670929,
+            "top1_confidence": 0.996896766332211,
+            "top5_spread": 0.9973230180458631,
+            "probability_variance": 0.9999880990032614,
+            "confidence_margin": 0.9979759895487222,
+            "mc_dropout_consistency": 0.0546146416995168
+        }
+    },
+    "metric_contributions_to_total_scrs": {
+        "rep_hidden_state_drift": 0.09832373231391782,
+        "rep_embedding_drift": 0.0994946938403882,
+        "rep_attention_drift": 0.051210736980040854,
+        "rep_kl_divergence": 0.0634465154901251,
+        "rep_js_divergence": 0.061663869488767245,
+        "rep_prediction_agreement": 0.09766899766899766,
+        "unc_predictive_entropy": 0.06558007820447286,
+        "unc_top1_confidence": 0.0664597844221474,
+        "unc_top5_spread": 0.06648820120305754,
+        "unc_probability_variance": 0.06666587326688408,
+        "unc_confidence_margin": 0.06653173263658148,
+        "unc_mc_dropout_consistency": 0.0036409761133011195
+    },
+    "normalization_metadata": {
+        "representation_metadata": {
+            "kl_min": 0.0,
+            "kl_max": 10.0,
+            "raw_kl_divergence": 6.344651549012511,
+            "raw_js_divergence": 0.6166386948876725,
+            "raw_hidden_cosine": 0.016762676860821644,
+            "raw_embedding_cosine": 0.005053061596117914,
+            "raw_attention_cosine": 0.48789263019959134,
+            "raw_prediction_agreement": 0.023310023310023312
+        },
+        "uncertainty_metadata": {
+            "raw_predictive_entropy": 0.9837011730670929,
+            "raw_top1_confidence": 0.003103233667789027,
+            "raw_top5_spread": 0.0026769819541368634,
+            "raw_probability_variance": 1.1900996738631875e-05,
+            "raw_confidence_margin": 0.002024010451277718,
+            "raw_mc_dropout_consistency": 0.9453853583004832
+        }
+    },
+    "metadata": {
+        "title": "Synthetic Collapse Risk Score (SCRS) Report",
+        "framework_version": "1.0",
+        "description": "Unified mathematical fusion of representation drift (Probe) and prediction uncertainty (Ensemble).",
+        "probe_report_source": "/content/collapse-resistant/probe_out/student2_baseline/representation_drift_report.json",
+        "ensemble_report_source": "/content/collapse-resistant/ensemble_out/student2_baseline/variance_report.json"
+    }
+}
