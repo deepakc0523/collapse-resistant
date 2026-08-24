@@ -256,19 +256,18 @@ def compute_confidence_margin(probs: torch.Tensor) -> float:
 # Metric 6 — Monte-Carlo Dropout Consistency
 # ===========================================================================
 
-def compute_mc_dropout_consistency(mc_probs: List[torch.Tensor]) -> float:
+def compute_mc_dropout_consistency(mc_predictions: List[torch.Tensor]) -> float:
     """
     Measures the stability of the model's top-1 token prediction across
     N stochastic forward passes with dropout enabled.
 
     Scientific basis
     ----------------
-    Given N probability distributions [p¹, p², ..., pᴺ] from N MC Dropout
+    Given N top-1 prediction tensors [y¹, y², ..., yᴺ] from N MC Dropout
     passes for a single prompt:
 
     For each token position t:
-      1. Compute the top-1 token prediction from each pass:
-             y^n(t) = argmax_v  p^n_v(t)
+      1. Top-1 token prediction from pass n: y^n(t)
 
       2. Find the majority-vote prediction:
              y*(t) = mode({y^1(t), ..., y^N(t)})
@@ -286,24 +285,22 @@ def compute_mc_dropout_consistency(mc_probs: List[torch.Tensor]) -> float:
                          highly sensitive to dropout stochasticity (uncertain).
 
     Args:
-        mc_probs: List of N probability tensors, each of shape
-                  [seq_len, vocab_size], representing N dropout passes
-                  for a single prompt.
+        mc_predictions: List of N prediction tensors, each of shape [seq_len],
+                        containing top-1 token IDs for N dropout passes
+                        for a single prompt.
 
     Returns:
         Scalar float in [0, 1] — mean prediction consistency.
     """
-    if not mc_probs:
+    if not mc_predictions:
         return 0.0
 
-    n_passes = len(mc_probs)
-    seq_len = mc_probs[0].size(0)
+    n_passes = len(mc_predictions)
+    seq_len = mc_predictions[0].size(0)
 
     # Collect top-1 token per pass per position
     # predictions shape: [n_passes, seq_len]
-    predictions = torch.stack(
-        [probs.argmax(dim=-1) for probs in mc_probs], dim=0
-    )  # [n_passes, seq_len]
+    predictions = torch.stack(mc_predictions, dim=0)  # [n_passes, seq_len]
 
     # Majority vote per position
     agreement_rates: List[float] = []
@@ -329,7 +326,7 @@ def compute_mc_dropout_consistency(mc_probs: List[torch.Tensor]) -> float:
 
 def compute_all_metrics(
     softmax_probs: List[torch.Tensor],
-    mc_probs: List[List[torch.Tensor]],
+    mc_predictions: List[List[torch.Tensor]],
     top_k: int = 5,
     vocab_size: int = 50257,
 ) -> Dict[str, Any]:
@@ -340,13 +337,13 @@ def compute_all_metrics(
     All scalar values are normalized to [0, 1] where applicable.
 
     Args:
-        softmax_probs: List of Tensors [seq_len, vocab_size], one per prompt.
-                       From standard (deterministic) forward passes.
-        mc_probs:      List of lists. mc_probs[i] is a list of N tensors
-                       [seq_len, vocab_size] from N MC Dropout passes for
-                       prompt i.
-        top_k:         Number of top tokens used in spread/variance metrics.
-        vocab_size:    Vocabulary size for entropy normalisation.
+        softmax_probs:  List of Tensors [seq_len, vocab_size], one per prompt.
+                        From standard (deterministic) forward passes.
+        mc_predictions: List of lists. mc_predictions[i] is a list of N tensors
+                        [seq_len] containing top-1 token IDs from N MC Dropout passes for
+                        prompt i.
+        top_k:          Number of top tokens used in spread/variance metrics.
+        vocab_size:     Vocabulary size for entropy normalisation.
 
     Returns:
         Dict with structure:
@@ -411,8 +408,8 @@ def compute_all_metrics(
         margin = compute_confidence_margin(probs)
 
         # Metric 6: MC Dropout Consistency
-        if mc_probs and idx < len(mc_probs) and mc_probs[idx]:
-            mc_consistency = compute_mc_dropout_consistency(mc_probs[idx])
+        if mc_predictions and idx < len(mc_predictions) and mc_predictions[idx]:
+            mc_consistency = compute_mc_dropout_consistency(mc_predictions[idx])
         else:
             logger.warning(
                 "No MC Dropout data for prompt %d — consistency set to NaN.", idx

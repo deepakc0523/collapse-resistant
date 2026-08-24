@@ -211,15 +211,22 @@ def run_verification() -> None:
         mc_extraction = extractor.extract_mc_dropout_probabilities(
             prompts, n_passes=config.mc_dropout_passes, batch_size=1
         )
-        mc_probs = mc_extraction["mc_probs"]
+        mc_predictions = mc_extraction["mc_predictions"]
 
-        assert len(mc_probs) == len(prompts), "MC Dropout: prompt count mismatch."
-        assert len(mc_probs[0]) == config.mc_dropout_passes, (
+        assert len(mc_predictions) == len(prompts), "MC Dropout: prompt count mismatch."
+        assert len(mc_predictions[0]) == config.mc_dropout_passes, (
             f"MC Dropout: expected {config.mc_dropout_passes} passes, "
-            f"got {len(mc_probs[0])}."
+            f"got {len(mc_predictions[0])}."
         )
 
-        consistency = compute_mc_dropout_consistency(mc_probs[0])
+        first_pred = mc_predictions[0][0]
+        assert first_pred.ndim == 1, f"Expected 1D prediction tensor, got {first_pred.ndim}D"
+        assert first_pred.device.type == "cpu", f"Expected CPU tensor, got {first_pred.device}"
+        assert first_pred.size(0) == first_probs.size(0), (
+            f"Sequence length mismatch: expected {first_probs.size(0)}, got {first_pred.size(0)}"
+        )
+
+        consistency = compute_mc_dropout_consistency(mc_predictions[0])
         _check_range(consistency, "MC Dropout Consistency")
         logger.info("  MC Dropout Consistency = %.6f  (over %d passes)", consistency, config.mc_dropout_passes)
         print("✓ Phase 7 PASSED — MC Dropout runs and consistency in [0, 1].\n")
@@ -230,7 +237,7 @@ def run_verification() -> None:
         logger.info("--- Phase 8: Verifying Report Generation ---")
         all_metrics = compute_all_metrics(
             softmax_probs=probs_list,
-            mc_probs=mc_probs,
+            mc_predictions=mc_predictions,
             top_k=config.top_k_confidence,
             vocab_size=vocab_size,
         )

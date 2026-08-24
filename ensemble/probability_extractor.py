@@ -123,12 +123,15 @@ class ProbabilityExtractor:
         batch_size: int = 2,
     ) -> Dict[str, Any]:
         """
-        Runs N stochastic forward passes with dropout activated to generate
-        an ensemble of probability distributions per prompt.
+        Runs N stochastic forward passes with dropout activated to extract top-1
+        predicted token IDs per pass.
 
         Monte-Carlo Dropout activates dropout layers by calling model.train(),
         while torch.no_grad() ensures no gradient computation or storage.
         Parameters remain fully frozen (requires_grad = False throughout).
+
+        Only top-1 predicted token IDs are retained on CPU to prevent excessive
+        CPU/GPU memory usage during long evaluation runs.
 
         Args:
             prompts:    List of prompt strings.
@@ -137,7 +140,7 @@ class ProbabilityExtractor:
 
         Returns:
             Dict with keys:
-              - "mc_probs": List[List[Tensor[seq_len, vocab_size]]]
+              - "mc_predictions": List[List[Tensor[seq_len]]]
                   Outer list indexed by prompt.
                   Inner list indexed by MC pass (length = n_passes).
         """
@@ -147,33 +150,61 @@ class ProbabilityExtractor:
             len(prompts),
         )
 
-        # Initialise per-prompt storage: mc_probs[prompt_idx][pass_idx]
+        # Initialise per-prompt storage: mc_predictions[prompt_idx][pass_idx]
         num_prompts = len(prompts)
-        mc_probs: List[List[torch.Tensor]] = [[] for _ in range(num_prompts)]
+        mc_predictions: List[List[torch.Tensor]] = [[] for _ in range(num_prompts)]
 
         # Temporarily switch to train mode to activate dropout stochasticity
         self.model.train()
 
-        with torch.no_grad():
-            for pass_idx in range(n_passes):
-                logger.debug("MC Dropout pass %d / %d", pass_idx + 1, n_passes)
+        try:
+            with torch.no_grad():
+                for pass_idx in range(n_passes):
+                    logger.info("MC Dropout pass %d/%d", pass_idx + 1, n_passes)
 
-                prompt_offset = 0
-                for batch_start in range(0, num_prompts, batch_size):
-                    batch_prompts = prompts[batch_start : batch_start + batch_size]
-                    batch_probs, _, _ = self._forward_batch(batch_prompts)
+                    for batch_start in range(0, num_prompts, batch_size):
+                        batch_prompts = prompts[batch_start : batch_start + batch_size]
+                        
+                        inputs = self.tokenizer(
+                            batch_prompts,
+                            padding=True,
+                            truncation=True,
+                            return_tensors="pt",
+                        )
+                        input_ids = inputs["input_ids"].to(self.device)
+                        attention_mask = inputs["attention_mask"].to(self.device)
 
-                    for local_idx, probs in enumerate(batch_probs):
-                        global_idx = batch_start + local_idx
-                        mc_probs[global_idx].append(probs)
+                        outputs = self.model(
+                            input_ids=input_ids,
+                            attention_mask=attention_mask,
+                            return_dict=True,
+                        )
 
-        # Restore evaluation mode after all MC passes
-        self.model.eval()
+                        logits_batch = outputs.logits
+                        preds_batch = torch.argmax(logits_batch, dim=-1)
+
+                        preds_cpu = preds_batch.cpu()
+                        mask_cpu = attention_mask.cpu()
+
+                        # Free temporary GPU tensors immediately
+                        del outputs, logits_batch, preds_batch, input_ids, attention_mask
+                        if self.device.type == "cuda":
+                            torch.cuda.empty_cache()
+
+                        b_size = preds_cpu.size(0)
+                        for b in range(b_size):
+                            actual_len = int(mask_cpu[b].sum().item())
+                            global_idx = batch_start + b
+                            mc_predictions[global_idx].append(preds_cpu[b, :actual_len])
+
+        finally:
+            # Always restore evaluation mode after MC passes
+            self.model.eval()
 
         logger.info(
             "[OK] MC Dropout extraction complete. %d passes per prompt.", n_passes
         )
-        return {"mc_probs": mc_probs}
+        return {"mc_predictions": mc_predictions}
 
     # ------------------------------------------------------------------
     # Private helpers

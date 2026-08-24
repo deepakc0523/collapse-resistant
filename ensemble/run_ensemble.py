@@ -143,7 +143,7 @@ def main() -> None:
     logger.info("[Step 7/8] Computing uncertainty metrics...")
     metrics_result = compute_all_metrics(
         softmax_probs=standard_extraction["softmax_probs"],
-        mc_probs=mc_extraction["mc_probs"],
+        mc_predictions=mc_extraction["mc_predictions"],
         top_k=config.top_k_confidence,
         vocab_size=vocab_size,
     )
