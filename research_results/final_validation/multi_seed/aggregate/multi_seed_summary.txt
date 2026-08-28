@@ -1,0 +1,31 @@
+================================================================================
+                     MULTI-SEED VALIDATION SUMMARY REPORT
+================================================================================
+
+Seeds Evaluated : [42, 123, 456, 789, 20261]
+Number of Seeds : 5
+
+--- Student-2 Baseline SCRS Statistics ---
+  Mean     : 0.8075
+  Std Dev  : 0.0007
+  Min      : 0.8068
+  Max      : 0.8086
+
+--- Student-2 Adaptive SCRS Statistics ---
+  Mean     : 0.7976
+  Std Dev  : 0.0018
+  Min      : 0.7966
+  Max      : 0.8009
+
+--- Paired Comparison & Statistical Analysis ---
+  Mean Difference (Adaptive - Baseline) : -0.0099
+  Mean Absolute Risk Reduction          : 0.0099
+  Seeds where Adaptive has LOWER SCRS   : 5 / 5
+  Seeds where Adaptive has HIGHER SCRS  : 0 / 5
+
+--- Statistical Significance Tests ---
+  Method Used      : scipy.stats
+  Paired t-test    : stat=-16.891550924488268, p=7.201008236553964e-05
+  Wilcoxon test    : stat=0.0, p=0.0625
+
+================================================================================

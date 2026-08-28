@@ -1,0 +1,22 @@
+================================================================================
+                  SCRS WEIGHTING SENSITIVITY SUMMARY REPORT
+================================================================================
+
+Evaluated Weighting Ratios (Representation : Uncertainty):
+
+--- Student-1 ---
+  Ratio 50:50 -> SCRS: 0.7455 [High] (Rep Contribution: 0.3625, Unc Contribution: 0.3830)
+  Ratio 60:40 -> SCRS: 0.7414 [High] (Rep Contribution: 0.4350, Unc Contribution: 0.3064)
+  Ratio 70:30 -> SCRS: 0.7373 [High] (Rep Contribution: 0.5075, Unc Contribution: 0.2298)
+
+--- Student-2 Baseline ---
+  Ratio 50:50 -> SCRS: 0.8077 [Critical] (Rep Contribution: 0.4025, Unc Contribution: 0.4052)
+  Ratio 60:40 -> SCRS: 0.8072 [Critical] (Rep Contribution: 0.4830, Unc Contribution: 0.3242)
+  Ratio 70:30 -> SCRS: 0.8066 [Critical] (Rep Contribution: 0.5635, Unc Contribution: 0.2431)
+
+--- Student-2 Adaptive ---
+  Ratio 50:50 -> SCRS: 0.8030 [Critical] (Rep Contribution: 0.3990, Unc Contribution: 0.4040)
+  Ratio 60:40 -> SCRS: 0.8020 [Critical] (Rep Contribution: 0.4788, Unc Contribution: 0.3232)
+  Ratio 70:30 -> SCRS: 0.8010 [Critical] (Rep Contribution: 0.5586, Unc Contribution: 0.2424)
+
+================================================================================

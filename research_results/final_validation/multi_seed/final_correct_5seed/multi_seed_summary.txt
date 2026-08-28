@@ -1,0 +1,12 @@
+FINAL CORRECTED FIVE-SEED VALIDATION
+======================================================================
+
+Seeds: [42, 123, 456, 789, 2026]
+
+Baseline SCRS: 0.807635 ± 0.000690
+Adaptive SCRS: 0.797841 ± 0.001753
+Mean SCRS reduction: 0.009794
+Adaptive lower SCRS: 5/5 seeds
+
+Paired t-test p-value: 5.716682753e-05
+Wilcoxon p-value: 0.0625

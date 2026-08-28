@@ -1,0 +1,26 @@
+================================================================================
+                  MONITORING COMPONENT ABLATION SUMMARY
+================================================================================
+
+Configuration  : FULL
+  Weights      : Rep = 0.60, Unc = 0.40
+  Rep Risk     : 0.7652
+  Unc Risk     : 0.8571
+  Overall SCRS : 0.8020
+  Risk Label   : Critical
+
+Configuration  : NO_PRDAF
+  Weights      : Rep = 0.00, Unc = 1.00
+  Rep Risk     : 0.7652
+  Unc Risk     : 0.8571
+  Overall SCRS : 0.8571
+  Risk Label   : Critical
+
+Configuration  : NO_EVM
+  Weights      : Rep = 1.00, Unc = 0.00
+  Rep Risk     : 0.7652
+  Unc Risk     : 0.8571
+  Overall SCRS : 0.7652
+  Risk Label   : High
+
+================================================================================

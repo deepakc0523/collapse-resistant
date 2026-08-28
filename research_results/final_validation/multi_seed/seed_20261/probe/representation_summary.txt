@@ -1,0 +1,55 @@
+================================================================================
+ARME REPRESENTATION DRIFT ANALYSIS REPORT
+================================================================================
+Anchor Model : checkpoints/anchor_model/frozen
+Student Model: checkpoints/student_model/best
+Prompt Source: clean_wikitext.txt
+Processed    : 100 prompts
+================================================================================
+
+1. EMBEDDING DRIFT ANALYSIS
+----------------------------------------
+  Static Token Embedding (WTE) Cosine Similarity : 0.000348
+  Static Token Embedding (WTE) Euclidean Distance: 3.908784
+  Static Pos Embedding (WPE) Cosine Similarity   : -0.000187
+  Static Pos Embedding (WPE) Euclidean Distance  : 3.435060
+
+  Dynamic (Prompt Context) Token Embedding Cosine : 0.002313
+  Dynamic (Prompt Context) Pos Embedding Cosine   : 0.002545
+
+2. LOGIT & PREDICTION DIVERGENCE
+----------------------------------------
+  Mean KL Divergence (Anchor || Student)         : 5.704545
+  Mean Jensen-Shannon Divergence (JSD)           : 0.598909
+  Top-1 Prediction Agreement                     : 12.19%
+  Top-5 Prediction Agreement                     : 16.23%
+  Vocabulary Overlap (Jaccard top-50)            : 5.96%
+
+3. LAYER-WISE REPRESENTATION ALIGNMENT
+----------------------------------------
+  LAYER_0  -> Cosine Similarity: 0.014529 | Euclidean Distance: 51.897426
+  LAYER_1  -> Cosine Similarity: 0.030160 | Euclidean Distance: 87.873969
+  LAYER_2  -> Cosine Similarity: 0.007172 | Euclidean Distance: 100.349705
+  LAYER_3  -> Cosine Similarity: 0.021077 | Euclidean Distance: 121.320378
+  LAYER_4  -> Cosine Similarity: 0.029663 | Euclidean Distance: 174.639815
+  LAYER_5  -> Cosine Similarity: 0.011657 | Euclidean Distance: 170.996333
+
+4. LAYER-WISE ATTENTION MAP ALIGNMENT
+----------------------------------------
+  LAYER_0  -> Attention Cosine Similarity: 0.628457 | Attention JSD: 0.208101
+  LAYER_1  -> Attention Cosine Similarity: 0.518102 | Attention JSD: 0.270732
+  LAYER_2  -> Attention Cosine Similarity: 0.447049 | Attention JSD: 0.336155
+  LAYER_3  -> Attention Cosine Similarity: 0.395283 | Attention JSD: 0.382119
+  LAYER_4  -> Attention Cosine Similarity: 0.407945 | Attention JSD: 0.359516
+  LAYER_5  -> Attention Cosine Similarity: 0.453815 | Attention JSD: 0.302494
+
+================================================================================
+DEEP LEARNING ANALYSIS / SCIENTIFIC COMMENTS
+================================================================================
+- Model collapse and representation drift are characterized by high Euclidean distance
+  and decreasing Cosine similarity, particularly in the later layers.
+- Top-1 Prediction Agreement indicates how closely the student's output policy mirrors
+  the frozen anchor. A high agreement is desirable in the early self-training iterations.
+- Jensen-Shannon Divergence is symmetric, offering a bounded metric [0, ln(2)] representing
+  the discrepancy between output policies. KL Divergence tracks informational loss.
+================================================================================

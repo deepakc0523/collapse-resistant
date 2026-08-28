@@ -1,0 +1,287 @@
+{
+  "experiment_name": "weighting_sensitivity",
+  "default_weight": "60:40",
+  "weight_configurations_evaluated": [
+    "50:50",
+    "60:40",
+    "70:30"
+  ],
+  "sensitivity_results": {
+    "Student-1": [
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.1,
+        "uncertainty_weight": 0.9,
+        "weight_label": "10:90",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7619,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.2,
+        "uncertainty_weight": 0.8,
+        "weight_label": "20:80",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7578,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.3,
+        "uncertainty_weight": 0.7,
+        "weight_label": "30:70",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7537,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.4,
+        "uncertainty_weight": 0.6,
+        "weight_label": "40:60",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7496,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.5,
+        "uncertainty_weight": 0.5,
+        "weight_label": "50:50",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7455,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.6,
+        "uncertainty_weight": 0.4,
+        "weight_label": "60:40",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7414000000000001,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.7,
+        "uncertainty_weight": 0.3,
+        "weight_label": "70:30",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7373,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.8,
+        "uncertainty_weight": 0.2,
+        "weight_label": "80:20",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7332,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-1",
+        "representation_weight": 0.9,
+        "uncertainty_weight": 0.1,
+        "weight_label": "90:10",
+        "representation_risk": 0.725,
+        "uncertainty_risk": 0.766,
+        "scrs": 0.7291,
+        "risk_label": "High"
+      }
+    ],
+    "Student-2 Baseline": [
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.1,
+        "uncertainty_weight": 0.9,
+        "weight_label": "10:90",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8099500000000001,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.2,
+        "uncertainty_weight": 0.8,
+        "weight_label": "20:80",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8094000000000001,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.3,
+        "uncertainty_weight": 0.7,
+        "weight_label": "30:70",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8088499999999998,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.4,
+        "uncertainty_weight": 0.6,
+        "weight_label": "40:60",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8083,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.5,
+        "uncertainty_weight": 0.5,
+        "weight_label": "50:50",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.80775,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.6,
+        "uncertainty_weight": 0.4,
+        "weight_label": "60:40",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8072,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.7,
+        "uncertainty_weight": 0.3,
+        "weight_label": "70:30",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.80665,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.8,
+        "uncertainty_weight": 0.2,
+        "weight_label": "80:20",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.8061000000000001,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Baseline",
+        "representation_weight": 0.9,
+        "uncertainty_weight": 0.1,
+        "weight_label": "90:10",
+        "representation_risk": 0.805,
+        "uncertainty_risk": 0.8105,
+        "scrs": 0.80555,
+        "risk_label": "Critical"
+      }
+    ],
+    "Student-2 Adaptive": [
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.1,
+        "uncertainty_weight": 0.9,
+        "weight_label": "10:90",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.807,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.2,
+        "uncertainty_weight": 0.8,
+        "weight_label": "20:80",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.806,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.3,
+        "uncertainty_weight": 0.7,
+        "weight_label": "30:70",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.8049999999999999,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.4,
+        "uncertainty_weight": 0.6,
+        "weight_label": "40:60",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.804,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.5,
+        "uncertainty_weight": 0.5,
+        "weight_label": "50:50",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.803,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.6,
+        "uncertainty_weight": 0.4,
+        "weight_label": "60:40",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.802,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.7,
+        "uncertainty_weight": 0.3,
+        "weight_label": "70:30",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.8009999999999999,
+        "risk_label": "Critical"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.8,
+        "uncertainty_weight": 0.2,
+        "weight_label": "80:20",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.8,
+        "risk_label": "High"
+      },
+      {
+        "model_name": "Student-2 Adaptive",
+        "representation_weight": 0.9,
+        "uncertainty_weight": 0.1,
+        "weight_label": "90:10",
+        "representation_risk": 0.798,
+        "uncertainty_risk": 0.808,
+        "scrs": 0.799,
+        "risk_label": "High"
+      }
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "seed": 789,
+  "model_name": "Student-2 Adaptive",
+  "model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/adaptive/best",
+  "scrs": 0.7969314540362572,
+  "risk_label": "High",
+  "representation_risk": 0.7586605461629389,
+  "uncertainty_risk": 0.8543378158462347
+}

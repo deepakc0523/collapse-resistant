@@ -1,0 +1,4 @@
+Ablation_Config,Representation_Weight,Uncertainty_Weight,Representation_Risk,Uncertainty_Risk,SCRS,Risk_Label
+FULL,0.60,0.40,0.7652,0.8571,0.8020,Critical
+NO_PRDAF,0.00,1.00,0.7652,0.8571,0.8571,Critical
+NO_EVM,1.00,0.00,0.7652,0.8571,0.7652,High

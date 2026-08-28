@@ -1,0 +1,936 @@
+{
+    "metadata": {
+        "title": "Ensemble Variance Monitor (EVM) \u2014 Prediction Uncertainty Report",
+        "module": "evm",
+        "framework_version": "1.0",
+        "timestamp": "2026-08-28T14:02:56.704521+00:00",
+        "description": "Measures the Student model's prediction uncertainty using six calibrated metrics. All metrics are normalized to [0, 1]. This report is a direct upstream input to SCRS.",
+        "configurations": {
+            "seed": 123
+        },
+        "normalization_notes": {
+            "predictive_entropy": "Shannon entropy H(p) = -sum_v p_v*log(p_v), normalized by log(vocab_size) to [0, 1]. Value 1 = maximum uncertainty (uniform distribution). Value 0 = maximum confidence (degenerate distribution).",
+            "top1_confidence": "Maximum probability max_v p_v. Native probability in [0, 1]. Value 1 = model places all mass on one token. Value 0 = model places essentially no mass on any single token.",
+            "top5_confidence_spread": "Difference p_(1) - p_(5) between rank-1 and rank-5 probabilities. Both are probabilities so difference is in [0, 1]. Large value = mass concentrated at top. Small value = flat distribution.",
+            "probability_variance": "Sample variance of top-k probabilities, normalized by the theoretical maximum variance (1/k)(1-1/k) for a k-item distribution. Range [0, 1]. High value = peaked/confident. Low value = flat/uncertain.",
+            "confidence_margin": "Difference p_(1) - p_(2) between rank-1 and rank-2 probabilities. Both are probabilities so difference is in [0, 1]. Large margin = model strongly prefers one token. Near zero = confusion.",
+            "mc_dropout_consistency": "Fraction of MC Dropout passes agreeing with the majority-vote prediction, averaged over token positions. Range [0, 1]. Value 1 = all passes agree (stable). Value 0 = all passes disagree (unstable)."
+        }
+    },
+    "aggregate_metrics": {
+        "mean_predictive_entropy": 0.974708622097969,
+        "std_predictive_entropy": 0.000553745401521979,
+        "mean_top1_confidence": 0.011581326564773918,
+        "std_top1_confidence": 0.0009427389565054717,
+        "mean_top5_confidence_spread": 0.010812033815309405,
+        "std_top5_confidence_spread": 0.0009795960571388981,
+        "mean_probability_variance": 0.0001349448751716409,
+        "std_probability_variance": 3.672123774040383e-05,
+        "mean_confidence_margin": 0.0032403159607201815,
+        "std_confidence_margin": 0.0009108416604694438,
+        "mean_mc_dropout_consistency": 0.8253071463018256,
+        "std_mc_dropout_consistency": 0.05630214596735009
+    },
+    "per_prompt_metrics": [
+        {
+            "prompt_index": 0,
+            "predictive_entropy": 0.9749788641929626,
+            "top1_confidence": 0.010600908659398556,
+            "top5_confidence_spread": 0.009768587537109852,
+            "probability_variance": 0.00010836575529538095,
+            "confidence_margin": 0.002217728877440095,
+            "mc_dropout_consistency": 0.7879999999999999
+        },
+        {
+            "prompt_index": 1,
+            "predictive_entropy": 0.9752689599990845,
+            "top1_confidence": 0.010624696500599384,
+            "top5_confidence_spread": 0.009792204946279526,
+            "probability_variance": 0.00010939816274913028,
+            "confidence_margin": 0.0024627281818538904,
+            "mc_dropout_consistency": 0.7761904761904762
+        },
+        {
+            "prompt_index": 2,
+            "predictive_entropy": 0.9750222563743591,
+            "top1_confidence": 0.01103758905082941,
+            "top5_confidence_spread": 0.010178826749324799,
+            "probability_variance": 0.00011313639697618783,
+            "confidence_margin": 0.0030750243458896875,
+            "mc_dropout_consistency": 0.806521739130435
+        },
+        {
+            "prompt_index": 3,
+            "predictive_entropy": 0.9743725061416626,
+            "top1_confidence": 0.012429392896592617,
+            "top5_confidence_spread": 0.011725584045052528,
+            "probability_variance": 0.00015013520896900445,
+            "confidence_margin": 0.0037946219090372324,
+            "mc_dropout_consistency": 0.8565217391304347
+        },
+        {
+            "prompt_index": 4,
+            "predictive_entropy": 0.9751565456390381,
+            "top1_confidence": 0.010420479811728,
+            "top5_confidence_spread": 0.009559589438140392,
+            "probability_variance": 0.00010278910485794768,
+            "confidence_margin": 0.002083103870972991,
+            "mc_dropout_consistency": 0.785483870967742
+        },
+        {
+            "prompt_index": 5,
+            "predictive_entropy": 0.9754518270492554,
+            "top1_confidence": 0.010561471804976463,
+            "top5_confidence_spread": 0.009821566753089428,
+            "probability_variance": 0.00010665156150935218,
+            "confidence_margin": 0.0024082527961581945,
+            "mc_dropout_consistency": 0.788372093023256
+        },
+        {
+            "prompt_index": 6,
+            "predictive_entropy": 0.9748684167861938,
+            "top1_confidence": 0.011175417341291904,
+            "top5_confidence_spread": 0.010405846871435642,
+            "probability_variance": 0.00012105944188078865,
+            "confidence_margin": 0.002702760510146618,
+            "mc_dropout_consistency": 0.8097560975609757
+        },
+        {
+            "prompt_index": 7,
+            "predictive_entropy": 0.9743970632553101,
+            "top1_confidence": 0.012333435006439686,
+            "top5_confidence_spread": 0.011643296107649803,
+            "probability_variance": 0.00014227362407837063,
+            "confidence_margin": 0.003938751760870218,
+            "mc_dropout_consistency": 0.8933333333333332
+        },
+        {
+            "prompt_index": 8,
+            "predictive_entropy": 0.9746209383010864,
+            "top1_confidence": 0.011177271604537964,
+            "top5_confidence_spread": 0.010431500151753426,
+            "probability_variance": 0.00012501710443757474,
+            "confidence_margin": 0.0021606595255434513,
+            "mc_dropout_consistency": 0.7785714285714285
+        },
+        {
+            "prompt_index": 9,
+            "predictive_entropy": 0.9738551378250122,
+            "top1_confidence": 0.01317291334271431,
+            "top5_confidence_spread": 0.012453592382371426,
+            "probability_variance": 0.00016254201182164252,
+            "confidence_margin": 0.004615585319697857,
+            "mc_dropout_consistency": 0.8918032786885246
+        },
+        {
+            "prompt_index": 10,
+            "predictive_entropy": 0.974520742893219,
+            "top1_confidence": 0.012651648372411728,
+            "top5_confidence_spread": 0.011958038434386253,
+            "probability_variance": 0.00014809437561780214,
+            "confidence_margin": 0.004614712204784155,
+            "mc_dropout_consistency": 0.9147058823529411
+        },
+        {
+            "prompt_index": 11,
+            "predictive_entropy": 0.9755045175552368,
+            "top1_confidence": 0.010505168698728085,
+            "top5_confidence_spread": 0.009803710505366325,
+            "probability_variance": 0.00011315487063257024,
+            "confidence_margin": 0.002152447821572423,
+            "mc_dropout_consistency": 0.7749999999999999
+        },
+        {
+            "prompt_index": 12,
+            "predictive_entropy": 0.9744003415107727,
+            "top1_confidence": 0.011984160169959068,
+            "top5_confidence_spread": 0.011279631406068802,
+            "probability_variance": 0.00013951104483567178,
+            "confidence_margin": 0.003205039305612445,
+            "mc_dropout_consistency": 0.8399999999999999
+        },
+        {
+            "prompt_index": 13,
+            "predictive_entropy": 0.9746000170707703,
+            "top1_confidence": 0.011694880202412605,
+            "top5_confidence_spread": 0.010909250937402248,
+            "probability_variance": 0.00012667513510677963,
+            "confidence_margin": 0.0033068694174289703,
+            "mc_dropout_consistency": 0.8213114754098361
+        },
+        {
+            "prompt_index": 14,
+            "predictive_entropy": 0.9746637344360352,
+            "top1_confidence": 0.011135872453451157,
+            "top5_confidence_spread": 0.010353799909353256,
+            "probability_variance": 0.00011854594777105376,
+            "confidence_margin": 0.0024505015462636948,
+            "mc_dropout_consistency": 0.8045454545454546
+        },
+        {
+            "prompt_index": 15,
+            "predictive_entropy": 0.9736236929893494,
+            "top1_confidence": 0.013374478556215763,
+            "top5_confidence_spread": 0.012658840045332909,
+            "probability_variance": 0.00017286329239141196,
+            "confidence_margin": 0.004578131251037121,
+            "mc_dropout_consistency": 0.8393939393939395
+        },
+        {
+            "prompt_index": 16,
+            "predictive_entropy": 0.974631130695343,
+            "top1_confidence": 0.012112251482903957,
+            "top5_confidence_spread": 0.011459817178547382,
+            "probability_variance": 0.0001353883562842384,
+            "confidence_margin": 0.003830365603789687,
+            "mc_dropout_consistency": 0.8937500000000002
+        },
+        {
+            "prompt_index": 17,
+            "predictive_entropy": 0.9741017818450928,
+            "top1_confidence": 0.012778528966009617,
+            "top5_confidence_spread": 0.01208934560418129,
+            "probability_variance": 0.00015337864169850945,
+            "confidence_margin": 0.004247224889695644,
+            "mc_dropout_consistency": 0.8999999999999999
+        },
+        {
+            "prompt_index": 18,
+            "predictive_entropy": 0.9746019244194031,
+            "top1_confidence": 0.011874210089445114,
+            "top5_confidence_spread": 0.011179216206073761,
+            "probability_variance": 0.00013714925444219261,
+            "confidence_margin": 0.003271934576332569,
+            "mc_dropout_consistency": 0.8102040816326531
+        },
+        {
+            "prompt_index": 19,
+            "predictive_entropy": 0.9748375415802002,
+            "top1_confidence": 0.011686025187373161,
+            "top5_confidence_spread": 0.010961439460515976,
+            "probability_variance": 0.00013376657443586737,
+            "confidence_margin": 0.0033404845744371414,
+            "mc_dropout_consistency": 0.8407407407407409
+        },
+        {
+            "prompt_index": 20,
+            "predictive_entropy": 0.9752172231674194,
+            "top1_confidence": 0.010370656847953796,
+            "top5_confidence_spread": 0.009517881087958813,
+            "probability_variance": 0.00010452087735757232,
+            "confidence_margin": 0.001990857534110546,
+            "mc_dropout_consistency": 0.7627118644067796
+        },
+        {
+            "prompt_index": 21,
+            "predictive_entropy": 0.9743120670318604,
+            "top1_confidence": 0.011992670595645905,
+            "top5_confidence_spread": 0.011212211102247238,
+            "probability_variance": 0.00014110417396295816,
+            "confidence_margin": 0.003159845480695367,
+            "mc_dropout_consistency": 0.804
+        },
+        {
+            "prompt_index": 22,
+            "predictive_entropy": 0.9750202894210815,
+            "top1_confidence": 0.011375941336154938,
+            "top5_confidence_spread": 0.010607749223709106,
+            "probability_variance": 0.00012260601215530187,
+            "confidence_margin": 0.0031441482715308666,
+            "mc_dropout_consistency": 0.8362068965517241
+        },
+        {
+            "prompt_index": 23,
+            "predictive_entropy": 0.9745644330978394,
+            "top1_confidence": 0.012569168582558632,
+            "top5_confidence_spread": 0.011915735900402069,
+            "probability_variance": 0.00014649800141341984,
+            "confidence_margin": 0.0044121635146439075,
+            "mc_dropout_consistency": 0.90625
+        },
+        {
+            "prompt_index": 24,
+            "predictive_entropy": 0.9748015999794006,
+            "top1_confidence": 0.011079370975494385,
+            "top5_confidence_spread": 0.01024714671075344,
+            "probability_variance": 0.00012520802556537092,
+            "confidence_margin": 0.002830598270520568,
+            "mc_dropout_consistency": 0.7710526315789474
+        },
+        {
+            "prompt_index": 25,
+            "predictive_entropy": 0.9748619794845581,
+            "top1_confidence": 0.011501041240990162,
+            "top5_confidence_spread": 0.010689359158277512,
+            "probability_variance": 0.00012446266191545874,
+            "confidence_margin": 0.0034334801603108644,
+            "mc_dropout_consistency": 0.8222222222222223
+        },
+        {
+            "prompt_index": 26,
+            "predictive_entropy": 0.9748049974441528,
+            "top1_confidence": 0.011545677669346333,
+            "top5_confidence_spread": 0.010791617445647717,
+            "probability_variance": 0.00012279179645702243,
+            "confidence_margin": 0.0033346167765557766,
+            "mc_dropout_consistency": 0.884375
+        },
+        {
+            "prompt_index": 27,
+            "predictive_entropy": 0.9741771817207336,
+            "top1_confidence": 0.012670355848968029,
+            "top5_confidence_spread": 0.011995808221399784,
+            "probability_variance": 0.0001514018513262272,
+            "confidence_margin": 0.0040886797942221165,
+            "mc_dropout_consistency": 0.8814814814814814
+        },
+        {
+            "prompt_index": 28,
+            "predictive_entropy": 0.9753580689430237,
+            "top1_confidence": 0.010607914067804813,
+            "top5_confidence_spread": 0.009729458019137383,
+            "probability_variance": 0.00010625767754390836,
+            "confidence_margin": 0.0027926089242100716,
+            "mc_dropout_consistency": 0.8027027027027027
+        },
+        {
+            "prompt_index": 29,
+            "predictive_entropy": 0.9748285412788391,
+            "top1_confidence": 0.011234017089009285,
+            "top5_confidence_spread": 0.010439884848892689,
+            "probability_variance": 0.00012217643961776048,
+            "confidence_margin": 0.0028696926310658455,
+            "mc_dropout_consistency": 0.8054054054054054
+        },
+        {
+            "prompt_index": 30,
+            "predictive_entropy": 0.9751248359680176,
+            "top1_confidence": 0.010911750607192516,
+            "top5_confidence_spread": 0.01013904344290495,
+            "probability_variance": 0.00011533701763255522,
+            "confidence_margin": 0.00244593876414001,
+            "mc_dropout_consistency": 0.8152542372881356
+        },
+        {
+            "prompt_index": 31,
+            "predictive_entropy": 0.9741369485855103,
+            "top1_confidence": 0.01264843251556158,
+            "top5_confidence_spread": 0.011904287151992321,
+            "probability_variance": 0.0001525499828858301,
+            "confidence_margin": 0.0040408894419670105,
+            "mc_dropout_consistency": 0.834375
+        },
+        {
+            "prompt_index": 32,
+            "predictive_entropy": 0.9750296473503113,
+            "top1_confidence": 0.010589524172246456,
+            "top5_confidence_spread": 0.009687396697700024,
+            "probability_variance": 0.00011477510270196944,
+            "confidence_margin": 0.0023890179581940174,
+            "mc_dropout_consistency": 0.7403508771929824
+        },
+        {
+            "prompt_index": 33,
+            "predictive_entropy": 0.9746556878089905,
+            "top1_confidence": 0.012167767621576786,
+            "top5_confidence_spread": 0.011394440196454525,
+            "probability_variance": 0.00013943234807811677,
+            "confidence_margin": 0.004276590887457132,
+            "mc_dropout_consistency": 0.8714285714285713
+        },
+        {
+            "prompt_index": 34,
+            "predictive_entropy": 0.9751498103141785,
+            "top1_confidence": 0.011195237748324871,
+            "top5_confidence_spread": 0.010460475459694862,
+            "probability_variance": 0.00012194630107842386,
+            "confidence_margin": 0.0028673990163952112,
+            "mc_dropout_consistency": 0.8111111111111111
+        },
+        {
+            "prompt_index": 35,
+            "predictive_entropy": 0.97544926404953,
+            "top1_confidence": 0.010447467677295208,
+            "top5_confidence_spread": 0.009633447043597698,
+            "probability_variance": 0.00010402838961454108,
+            "confidence_margin": 0.002361490624025464,
+            "mc_dropout_consistency": 0.7947368421052631
+        },
+        {
+            "prompt_index": 36,
+            "predictive_entropy": 0.9754401445388794,
+            "top1_confidence": 0.010107114911079407,
+            "top5_confidence_spread": 0.009312741458415985,
+            "probability_variance": 0.00010310779907740653,
+            "confidence_margin": 0.0016318418784067035,
+            "mc_dropout_consistency": 0.7181818181818181
+        },
+        {
+            "prompt_index": 37,
+            "predictive_entropy": 0.974480926990509,
+            "top1_confidence": 0.012968932278454304,
+            "top5_confidence_spread": 0.012253970839083195,
+            "probability_variance": 0.0001502057712059468,
+            "confidence_margin": 0.005271198693662882,
+            "mc_dropout_consistency": 0.9403846153846155
+        },
+        {
+            "prompt_index": 38,
+            "predictive_entropy": 0.9751648902893066,
+            "top1_confidence": 0.010503050871193409,
+            "top5_confidence_spread": 0.009645894169807434,
+            "probability_variance": 0.0001030195489875041,
+            "confidence_margin": 0.002342557767406106,
+            "mc_dropout_consistency": 0.7916666666666666
+        },
+        {
+            "prompt_index": 39,
+            "predictive_entropy": 0.9753575921058655,
+            "top1_confidence": 0.010351717472076416,
+            "top5_confidence_spread": 0.009512277320027351,
+            "probability_variance": 0.00011285666550975293,
+            "confidence_margin": 0.0023743528872728348,
+            "mc_dropout_consistency": 0.7612903225806451
+        },
+        {
+            "prompt_index": 40,
+            "predictive_entropy": 0.9749658107757568,
+            "top1_confidence": 0.010638902895152569,
+            "top5_confidence_spread": 0.009797869250178337,
+            "probability_variance": 0.00012162799248471856,
+            "confidence_margin": 0.0018865582533180714,
+            "mc_dropout_consistency": 0.6911764705882352
+        },
+        {
+            "prompt_index": 41,
+            "predictive_entropy": 0.9741269946098328,
+            "top1_confidence": 0.012080470100045204,
+            "top5_confidence_spread": 0.011371009983122349,
+            "probability_variance": 0.00014862588432151824,
+            "confidence_margin": 0.002927149413153529,
+            "mc_dropout_consistency": 0.8566037735849056
+        },
+        {
+            "prompt_index": 42,
+            "predictive_entropy": 0.9748460054397583,
+            "top1_confidence": 0.01190242450684309,
+            "top5_confidence_spread": 0.011181239038705826,
+            "probability_variance": 0.0001280428987229243,
+            "confidence_margin": 0.00402740016579628,
+            "mc_dropout_consistency": 0.9114285714285714
+        },
+        {
+            "prompt_index": 43,
+            "predictive_entropy": 0.9743579030036926,
+            "top1_confidence": 0.012337715364992619,
+            "top5_confidence_spread": 0.011637902818620205,
+            "probability_variance": 0.000143949655466713,
+            "confidence_margin": 0.003855063347145915,
+            "mc_dropout_consistency": 0.8703703703703702
+        },
+        {
+            "prompt_index": 44,
+            "predictive_entropy": 0.9744095206260681,
+            "top1_confidence": 0.011836160905659199,
+            "top5_confidence_spread": 0.011035298928618431,
+            "probability_variance": 0.00017873670731205493,
+            "confidence_margin": 0.004044475965201855,
+            "mc_dropout_consistency": 0.7303030303030302
+        },
+        {
+            "prompt_index": 45,
+            "predictive_entropy": 0.9736687541007996,
+            "top1_confidence": 0.013560201041400433,
+            "top5_confidence_spread": 0.012926523573696613,
+            "probability_variance": 0.00017124468286056072,
+            "confidence_margin": 0.004850104916840792,
+            "mc_dropout_consistency": 0.9047619047619048
+        },
+        {
+            "prompt_index": 46,
+            "predictive_entropy": 0.974250853061676,
+            "top1_confidence": 0.012683723121881485,
+            "top5_confidence_spread": 0.011985139921307564,
+            "probability_variance": 0.00014754389121662825,
+            "confidence_margin": 0.004302584566175938,
+            "mc_dropout_consistency": 0.9362068965517242
+        },
+        {
+            "prompt_index": 47,
+            "predictive_entropy": 0.9741123914718628,
+            "top1_confidence": 0.0122176893055439,
+            "top5_confidence_spread": 0.0114743048325181,
+            "probability_variance": 0.0001568752049934119,
+            "confidence_margin": 0.003518246579915285,
+            "mc_dropout_consistency": 0.7805555555555554
+        },
+        {
+            "prompt_index": 48,
+            "predictive_entropy": 0.9744871854782104,
+            "top1_confidence": 0.011698111891746521,
+            "top5_confidence_spread": 0.010946420952677727,
+            "probability_variance": 0.00013305930770002306,
+            "confidence_margin": 0.002816777676343918,
+            "mc_dropout_consistency": 0.8048780487804879
+        },
+        {
+            "prompt_index": 49,
+            "predictive_entropy": 0.975669801235199,
+            "top1_confidence": 0.010423403233289719,
+            "top5_confidence_spread": 0.009659089148044586,
+            "probability_variance": 0.00010269684571539983,
+            "confidence_margin": 0.0025981562212109566,
+            "mc_dropout_consistency": 0.8218181818181819
+        },
+        {
+            "prompt_index": 50,
+            "predictive_entropy": 0.9743576049804688,
+            "top1_confidence": 0.012345594353973866,
+            "top5_confidence_spread": 0.011657165363430977,
+            "probability_variance": 0.00014435345656238496,
+            "confidence_margin": 0.003828135784715414,
+            "mc_dropout_consistency": 0.8914893617021278
+        },
+        {
+            "prompt_index": 51,
+            "predictive_entropy": 0.9750059843063354,
+            "top1_confidence": 0.011202824302017689,
+            "top5_confidence_spread": 0.010395609773695469,
+            "probability_variance": 0.00011714140418916941,
+            "confidence_margin": 0.0032678910065442324,
+            "mc_dropout_consistency": 0.8432432432432433
+        },
+        {
+            "prompt_index": 52,
+            "predictive_entropy": 0.9755218625068665,
+            "top1_confidence": 0.010238762013614178,
+            "top5_confidence_spread": 0.009387229569256306,
+            "probability_variance": 0.00010037673928309232,
+            "confidence_margin": 0.0021103171166032553,
+            "mc_dropout_consistency": 0.7314285714285714
+        },
+        {
+            "prompt_index": 53,
+            "predictive_entropy": 0.9745375514030457,
+            "top1_confidence": 0.012029428966343403,
+            "top5_confidence_spread": 0.011303386650979519,
+            "probability_variance": 0.00013653442147187889,
+            "confidence_margin": 0.0035827287938445807,
+            "mc_dropout_consistency": 0.8624999999999999
+        },
+        {
+            "prompt_index": 54,
+            "predictive_entropy": 0.9745574593544006,
+            "top1_confidence": 0.01212069671601057,
+            "top5_confidence_spread": 0.011310143396258354,
+            "probability_variance": 0.0001354641717625782,
+            "confidence_margin": 0.00424573989585042,
+            "mc_dropout_consistency": 0.8784313725490196
+        },
+        {
+            "prompt_index": 55,
+            "predictive_entropy": 0.9745669364929199,
+            "top1_confidence": 0.011750548146665096,
+            "top5_confidence_spread": 0.01103220134973526,
+            "probability_variance": 0.00017886963905766606,
+            "confidence_margin": 0.00358852231875062,
+            "mc_dropout_consistency": 0.797560975609756
+        },
+        {
+            "prompt_index": 56,
+            "predictive_entropy": 0.9732109308242798,
+            "top1_confidence": 0.01399035844951868,
+            "top5_confidence_spread": 0.013291116803884506,
+            "probability_variance": 0.00018234053277410567,
+            "confidence_margin": 0.00522189075127244,
+            "mc_dropout_consistency": 0.8959999999999999
+        },
+        {
+            "prompt_index": 57,
+            "predictive_entropy": 0.9743674397468567,
+            "top1_confidence": 0.011738072149455547,
+            "top5_confidence_spread": 0.01086332369595766,
+            "probability_variance": 0.00014809226559009403,
+            "confidence_margin": 0.0034176018089056015,
+            "mc_dropout_consistency": 0.8214285714285714
+        },
+        {
+            "prompt_index": 58,
+            "predictive_entropy": 0.9736097455024719,
+            "top1_confidence": 0.013485649600625038,
+            "top5_confidence_spread": 0.012800006195902824,
+            "probability_variance": 0.00016971092554740608,
+            "confidence_margin": 0.0047201793640851974,
+            "mc_dropout_consistency": 0.8999999999999999
+        },
+        {
+            "prompt_index": 59,
+            "predictive_entropy": 0.9751073122024536,
+            "top1_confidence": 0.010437728837132454,
+            "top5_confidence_spread": 0.009604587219655514,
+            "probability_variance": 0.0001069703939720057,
+            "confidence_margin": 0.0018681228393688798,
+            "mc_dropout_consistency": 0.765
+        },
+        {
+            "prompt_index": 60,
+            "predictive_entropy": 0.9752981066703796,
+            "top1_confidence": 0.010006129741668701,
+            "top5_confidence_spread": 0.009130220860242844,
+            "probability_variance": 9.661699004936963e-05,
+            "confidence_margin": 0.0018749416340142488,
+            "mc_dropout_consistency": 0.7125
+        },
+        {
+            "prompt_index": 61,
+            "predictive_entropy": 0.9743171334266663,
+            "top1_confidence": 0.012357702478766441,
+            "top5_confidence_spread": 0.011622561141848564,
+            "probability_variance": 0.00014358371845446527,
+            "confidence_margin": 0.0038422478828579187,
+            "mc_dropout_consistency": 0.8867924528301888
+        },
+        {
+            "prompt_index": 62,
+            "predictive_entropy": 0.9746257066726685,
+            "top1_confidence": 0.011554250493645668,
+            "top5_confidence_spread": 0.010777678340673447,
+            "probability_variance": 0.00012772929039783776,
+            "confidence_margin": 0.0027815531939268112,
+            "mc_dropout_consistency": 0.8410256410256411
+        },
+        {
+            "prompt_index": 63,
+            "predictive_entropy": 0.9751349687576294,
+            "top1_confidence": 0.010431800968945026,
+            "top5_confidence_spread": 0.00959763489663601,
+            "probability_variance": 0.00010721028229454532,
+            "confidence_margin": 0.0021761932875961065,
+            "mc_dropout_consistency": 0.738095238095238
+        },
+        {
+            "prompt_index": 64,
+            "predictive_entropy": 0.9750887155532837,
+            "top1_confidence": 0.011062517762184143,
+            "top5_confidence_spread": 0.010299895890057087,
+            "probability_variance": 0.00011557382094906643,
+            "confidence_margin": 0.0028353624511510134,
+            "mc_dropout_consistency": 0.8642857142857142
+        },
+        {
+            "prompt_index": 65,
+            "predictive_entropy": 0.9747291207313538,
+            "top1_confidence": 0.011437694542109966,
+            "top5_confidence_spread": 0.010661267675459385,
+            "probability_variance": 0.0001240065903402865,
+            "confidence_margin": 0.002961478428915143,
+            "mc_dropout_consistency": 0.8372881355932204
+        },
+        {
+            "prompt_index": 66,
+            "predictive_entropy": 0.9745728373527527,
+            "top1_confidence": 0.01112484559416771,
+            "top5_confidence_spread": 0.010237903334200382,
+            "probability_variance": 0.0001270057400688529,
+            "confidence_margin": 0.002423273865133524,
+            "mc_dropout_consistency": 0.7257142857142856
+        },
+        {
+            "prompt_index": 67,
+            "predictive_entropy": 0.9754112362861633,
+            "top1_confidence": 0.010377842001616955,
+            "top5_confidence_spread": 0.00957786850631237,
+            "probability_variance": 0.00010868858225876465,
+            "confidence_margin": 0.00183817686047405,
+            "mc_dropout_consistency": 0.7675000000000001
+        },
+        {
+            "prompt_index": 68,
+            "predictive_entropy": 0.9750654697418213,
+            "top1_confidence": 0.011301024816930294,
+            "top5_confidence_spread": 0.010556662455201149,
+            "probability_variance": 0.00011995148088317364,
+            "confidence_margin": 0.003061627736315131,
+            "mc_dropout_consistency": 0.842622950819672
+        },
+        {
+            "prompt_index": 69,
+            "predictive_entropy": 0.9746325016021729,
+            "top1_confidence": 0.011717435903847218,
+            "top5_confidence_spread": 0.011029215529561043,
+            "probability_variance": 0.00013622967526316643,
+            "confidence_margin": 0.0027922093868255615,
+            "mc_dropout_consistency": 0.8515151515151514
+        },
+        {
+            "prompt_index": 70,
+            "predictive_entropy": 0.9743039608001709,
+            "top1_confidence": 0.011727781035006046,
+            "top5_confidence_spread": 0.01092337816953659,
+            "probability_variance": 0.00013362380559556186,
+            "confidence_margin": 0.002763632917776704,
+            "mc_dropout_consistency": 0.8537037037037035
+        },
+        {
+            "prompt_index": 71,
+            "predictive_entropy": 0.9751721024513245,
+            "top1_confidence": 0.010862499475479126,
+            "top5_confidence_spread": 0.010138880461454391,
+            "probability_variance": 0.00011323866783641279,
+            "confidence_margin": 0.0024813860654830933,
+            "mc_dropout_consistency": 0.8150000000000001
+        },
+        {
+            "prompt_index": 72,
+            "predictive_entropy": 0.9753383994102478,
+            "top1_confidence": 0.010574163869023323,
+            "top5_confidence_spread": 0.009777722880244255,
+            "probability_variance": 0.00010676207602955401,
+            "confidence_margin": 0.00270296772941947,
+            "mc_dropout_consistency": 0.7866666666666667
+        },
+        {
+            "prompt_index": 73,
+            "predictive_entropy": 0.9741997718811035,
+            "top1_confidence": 0.01249843928962946,
+            "top5_confidence_spread": 0.011841495521366596,
+            "probability_variance": 0.0001486836699768901,
+            "confidence_margin": 0.003845788771286607,
+            "mc_dropout_consistency": 0.8470588235294116
+        },
+        {
+            "prompt_index": 74,
+            "predictive_entropy": 0.9751871824264526,
+            "top1_confidence": 0.01101217232644558,
+            "top5_confidence_spread": 0.010275034233927727,
+            "probability_variance": 0.00011373820598237216,
+            "confidence_margin": 0.0028350886423140764,
+            "mc_dropout_consistency": 0.8491525423728815
+        },
+        {
+            "prompt_index": 75,
+            "predictive_entropy": 0.9737664461135864,
+            "top1_confidence": 0.012473602779209614,
+            "top5_confidence_spread": 0.01167250331491232,
+            "probability_variance": 0.0001974780607270077,
+            "confidence_margin": 0.003663521260023117,
+            "mc_dropout_consistency": 0.7636363636363637
+        },
+        {
+            "prompt_index": 76,
+            "predictive_entropy": 0.9746383428573608,
+            "top1_confidence": 0.011877764947712421,
+            "top5_confidence_spread": 0.011104846373200417,
+            "probability_variance": 0.00013169851445127279,
+            "confidence_margin": 0.0037399823777377605,
+            "mc_dropout_consistency": 0.8642857142857144
+        },
+        {
+            "prompt_index": 77,
+            "predictive_entropy": 0.9741645455360413,
+            "top1_confidence": 0.011988450773060322,
+            "top5_confidence_spread": 0.011045994237065315,
+            "probability_variance": 0.00021755180205218494,
+            "confidence_margin": 0.004236117005348206,
+            "mc_dropout_consistency": 0.7557692307692305
+        },
+        {
+            "prompt_index": 78,
+            "predictive_entropy": 0.9745760560035706,
+            "top1_confidence": 0.011688847094774246,
+            "top5_confidence_spread": 0.010905211791396141,
+            "probability_variance": 0.00013368370127864182,
+            "confidence_margin": 0.0032318243756890297,
+            "mc_dropout_consistency": 0.803125
+        },
+        {
+            "prompt_index": 79,
+            "predictive_entropy": 0.9749553799629211,
+            "top1_confidence": 0.011431274935603142,
+            "top5_confidence_spread": 0.010647967457771301,
+            "probability_variance": 0.00012266202247701585,
+            "confidence_margin": 0.003308414714410901,
+            "mc_dropout_consistency": 0.8525
+        },
+        {
+            "prompt_index": 80,
+            "predictive_entropy": 0.9755581617355347,
+            "top1_confidence": 0.01029211189597845,
+            "top5_confidence_spread": 0.009423215873539448,
+            "probability_variance": 9.731991303851828e-05,
+            "confidence_margin": 0.0026616316754370928,
+            "mc_dropout_consistency": 0.7924528301886794
+        },
+        {
+            "prompt_index": 81,
+            "predictive_entropy": 0.9747002124786377,
+            "top1_confidence": 0.011244555935263634,
+            "top5_confidence_spread": 0.010518813505768776,
+            "probability_variance": 0.00012600517948158085,
+            "confidence_margin": 0.002300811465829611,
+            "mc_dropout_consistency": 0.8062499999999999
+        },
+        {
+            "prompt_index": 82,
+            "predictive_entropy": 0.9755727648735046,
+            "top1_confidence": 0.01102150697261095,
+            "top5_confidence_spread": 0.010312143713235855,
+            "probability_variance": 0.00011024736159015447,
+            "confidence_margin": 0.003404051996767521,
+            "mc_dropout_consistency": 0.8657142857142859
+        },
+        {
+            "prompt_index": 83,
+            "predictive_entropy": 0.9753406643867493,
+            "top1_confidence": 0.010303697548806667,
+            "top5_confidence_spread": 0.00955171324312687,
+            "probability_variance": 0.00010530231520533562,
+            "confidence_margin": 0.00193456606939435,
+            "mc_dropout_consistency": 0.7440000000000001
+        },
+        {
+            "prompt_index": 84,
+            "predictive_entropy": 0.975280225276947,
+            "top1_confidence": 0.01031666062772274,
+            "top5_confidence_spread": 0.00952583085745573,
+            "probability_variance": 0.00010483153164386749,
+            "confidence_margin": 0.0018205544911324978,
+            "mc_dropout_consistency": 0.7218181818181817
+        },
+        {
+            "prompt_index": 85,
+            "predictive_entropy": 0.9732331037521362,
+            "top1_confidence": 0.01331045851111412,
+            "top5_confidence_spread": 0.012362765148282051,
+            "probability_variance": 0.00032723418553359807,
+            "confidence_margin": 0.005509596783667803,
+            "mc_dropout_consistency": 0.7303030303030303
+        },
+        {
+            "prompt_index": 86,
+            "predictive_entropy": 0.9741526246070862,
+            "top1_confidence": 0.012552149593830109,
+            "top5_confidence_spread": 0.011799205094575882,
+            "probability_variance": 0.00014270556857809424,
+            "confidence_margin": 0.0043441359885036945,
+            "mc_dropout_consistency": 0.909433962264151
+        },
+        {
+            "prompt_index": 87,
+            "predictive_entropy": 0.975853681564331,
+            "top1_confidence": 0.009722074493765831,
+            "top5_confidence_spread": 0.008869725279510021,
+            "probability_variance": 9.071743988897651e-05,
+            "confidence_margin": 0.0018028417835012078,
+            "mc_dropout_consistency": 0.7594594594594594
+        },
+        {
+            "prompt_index": 88,
+            "predictive_entropy": 0.9744097590446472,
+            "top1_confidence": 0.012214968912303448,
+            "top5_confidence_spread": 0.011534077115356922,
+            "probability_variance": 0.00014514673966914415,
+            "confidence_margin": 0.0035272357054054737,
+            "mc_dropout_consistency": 0.8181818181818182
+        },
+        {
+            "prompt_index": 89,
+            "predictive_entropy": 0.9735363125801086,
+            "top1_confidence": 0.013425633311271667,
+            "top5_confidence_spread": 0.01255347765982151,
+            "probability_variance": 0.0003421290311962366,
+            "confidence_margin": 0.005577151197940111,
+            "mc_dropout_consistency": 0.84375
+        },
+        {
+            "prompt_index": 90,
+            "predictive_entropy": 0.9745602011680603,
+            "top1_confidence": 0.011577331461012363,
+            "top5_confidence_spread": 0.010856859385967255,
+            "probability_variance": 0.00013287158799357712,
+            "confidence_margin": 0.0026335346046835184,
+            "mc_dropout_consistency": 0.8170212765957446
+        },
+        {
+            "prompt_index": 91,
+            "predictive_entropy": 0.9742326736450195,
+            "top1_confidence": 0.012715988792479038,
+            "top5_confidence_spread": 0.012049539014697075,
+            "probability_variance": 0.00014843983808532357,
+            "confidence_margin": 0.004285914823412895,
+            "mc_dropout_consistency": 0.9088888888888889
+        },
+        {
+            "prompt_index": 92,
+            "predictive_entropy": 0.9759188890457153,
+            "top1_confidence": 0.010015547275543213,
+            "top5_confidence_spread": 0.009160271845757961,
+            "probability_variance": 8.907968003768474e-05,
+            "confidence_margin": 0.0027642177883535624,
+            "mc_dropout_consistency": 0.8461538461538461
+        },
+        {
+            "prompt_index": 93,
+            "predictive_entropy": 0.974240779876709,
+            "top1_confidence": 0.012875872664153576,
+            "top5_confidence_spread": 0.012180238962173462,
+            "probability_variance": 0.00015072140377014875,
+            "confidence_margin": 0.004589309450238943,
+            "mc_dropout_consistency": 0.9416666666666668
+        },
+        {
+            "prompt_index": 94,
+            "predictive_entropy": 0.9748135209083557,
+            "top1_confidence": 0.011388778686523438,
+            "top5_confidence_spread": 0.010571966879069805,
+            "probability_variance": 0.00012873762170784175,
+            "confidence_margin": 0.0030777896754443645,
+            "mc_dropout_consistency": 0.8385964912280702
+        },
+        {
+            "prompt_index": 95,
+            "predictive_entropy": 0.9747581481933594,
+            "top1_confidence": 0.011759827844798565,
+            "top5_confidence_spread": 0.010997116565704346,
+            "probability_variance": 0.00013816669525112957,
+            "confidence_margin": 0.0036667794920504093,
+            "mc_dropout_consistency": 0.8441176470588235
+        },
+        {
+            "prompt_index": 96,
+            "predictive_entropy": 0.9746414422988892,
+            "top1_confidence": 0.011699949391186237,
+            "top5_confidence_spread": 0.010915315710008144,
+            "probability_variance": 0.00013207353185862303,
+            "confidence_margin": 0.0030844470020383596,
+            "mc_dropout_consistency": 0.84375
+        },
+        {
+            "prompt_index": 97,
+            "predictive_entropy": 0.9749780893325806,
+            "top1_confidence": 0.011349974200129509,
+            "top5_confidence_spread": 0.01053271722048521,
+            "probability_variance": 0.0001248866756213829,
+            "confidence_margin": 0.0036957827396690845,
+            "mc_dropout_consistency": 0.8432432432432432
+        },
+        {
+            "prompt_index": 98,
+            "predictive_entropy": 0.9749233722686768,
+            "top1_confidence": 0.01128039974719286,
+            "top5_confidence_spread": 0.010561276227235794,
+            "probability_variance": 0.00012101192987756804,
+            "confidence_margin": 0.0030248016119003296,
+            "mc_dropout_consistency": 0.8659090909090907
+        },
+        {
+            "prompt_index": 99,
+            "predictive_entropy": 0.9738274812698364,
+            "top1_confidence": 0.012671851553022861,
+            "top5_confidence_spread": 0.011919090524315834,
+            "probability_variance": 0.000154703258886002,
+            "confidence_margin": 0.003738108789548278,
+            "mc_dropout_consistency": 0.8671875
+        }
+    ]
+}

@@ -1,0 +1,59 @@
+{
+  "experiment_name": "multi_seed_validation",
+  "seeds": [
+    2026
+  ],
+  "num_seeds": 1,
+  "configuration": {
+    "anchor_model_path": "/content/drive/MyDrive/collapse-resistant-assets/checkpoints/anchor_model/frozen",
+    "baseline_model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/baseline/best",
+    "adaptive_model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/adaptive/best",
+    "dataset_path": "/content/drive/MyDrive/collapse-resistant-assets/data/processed/clean_wikitext.txt",
+    "max_prompts": 100,
+    "batch_size": 2
+  },
+  "baseline_summary": {
+    "mean": 0.808034770091273,
+    "std": 0.0,
+    "min": 0.808034770091273,
+    "max": 0.808034770091273,
+    "count": 1
+  },
+  "adaptive_summary": {
+    "mean": 0.7978395987356268,
+    "std": 0.0,
+    "min": 0.7978395987356268,
+    "max": 0.7978395987356268,
+    "count": 1
+  },
+  "paired_comparison": {
+    "num_pairs": 1,
+    "mean_difference_adaptive_minus_baseline": -0.010195171355646182,
+    "mean_absolute_risk_reduction": 0.010195171355646182,
+    "per_seed_differences": [
+      -0.010195171355646182
+    ],
+    "adaptive_lower_scrs_count": 1,
+    "adaptive_higher_scrs_count": 0,
+    "adaptive_equal_scrs_count": 0,
+    "statistical_tests": {
+      "method": "scipy.stats",
+      "paired_t_test": {
+        "statistic": null,
+        "p_value": null
+      },
+      "wilcoxon_signed_rank_test": {
+        "statistic": null,
+        "p_value": null
+      }
+    }
+  },
+  "per_seed_evaluations": [
+    {
+      "seed": 2026,
+      "baseline_scrs": 0.808034770091273,
+      "adaptive_scrs": 0.7978395987356268,
+      "difference_adaptive_minus_baseline": -0.010195171355646182
+    }
+  ]
+}

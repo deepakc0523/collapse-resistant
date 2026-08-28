@@ -1,0 +1,9 @@
+{
+  "seed": 456,
+  "model_name": "Student-2 Baseline",
+  "model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/baseline/best",
+  "scrs": 0.8073601429087002,
+  "risk_label": "Critical",
+  "representation_risk": 0.7860357346525714,
+  "uncertainty_risk": 0.8393467552928935
+}

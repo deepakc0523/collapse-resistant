@@ -1,0 +1,28 @@
+Model,Weight_Config,Rep_Weight,Unc_Weight,Rep_Risk,Unc_Risk,SCRS,Risk_Label
+Student-1,10:90,0.10,0.90,0.7250,0.7660,0.7619,High
+Student-1,20:80,0.20,0.80,0.7250,0.7660,0.7578,High
+Student-1,30:70,0.30,0.70,0.7250,0.7660,0.7537,High
+Student-1,40:60,0.40,0.60,0.7250,0.7660,0.7496,High
+Student-1,50:50,0.50,0.50,0.7250,0.7660,0.7455,High
+Student-1,60:40,0.60,0.40,0.7250,0.7660,0.7414,High
+Student-1,70:30,0.70,0.30,0.7250,0.7660,0.7373,High
+Student-1,80:20,0.80,0.20,0.7250,0.7660,0.7332,High
+Student-1,90:10,0.90,0.10,0.7250,0.7660,0.7291,High
+Student-2 Baseline,10:90,0.10,0.90,0.8050,0.8105,0.8100,Critical
+Student-2 Baseline,20:80,0.20,0.80,0.8050,0.8105,0.8094,Critical
+Student-2 Baseline,30:70,0.30,0.70,0.8050,0.8105,0.8088,Critical
+Student-2 Baseline,40:60,0.40,0.60,0.8050,0.8105,0.8083,Critical
+Student-2 Baseline,50:50,0.50,0.50,0.8050,0.8105,0.8077,Critical
+Student-2 Baseline,60:40,0.60,0.40,0.8050,0.8105,0.8072,Critical
+Student-2 Baseline,70:30,0.70,0.30,0.8050,0.8105,0.8066,Critical
+Student-2 Baseline,80:20,0.80,0.20,0.8050,0.8105,0.8061,Critical
+Student-2 Baseline,90:10,0.90,0.10,0.8050,0.8105,0.8055,Critical
+Student-2 Adaptive,10:90,0.10,0.90,0.7980,0.8080,0.8070,Critical
+Student-2 Adaptive,20:80,0.20,0.80,0.7980,0.8080,0.8060,Critical
+Student-2 Adaptive,30:70,0.30,0.70,0.7980,0.8080,0.8050,Critical
+Student-2 Adaptive,40:60,0.40,0.60,0.7980,0.8080,0.8040,Critical
+Student-2 Adaptive,50:50,0.50,0.50,0.7980,0.8080,0.8030,Critical
+Student-2 Adaptive,60:40,0.60,0.40,0.7980,0.8080,0.8020,Critical
+Student-2 Adaptive,70:30,0.70,0.30,0.7980,0.8080,0.8010,Critical
+Student-2 Adaptive,80:20,0.80,0.20,0.7980,0.8080,0.8000,High
+Student-2 Adaptive,90:10,0.90,0.10,0.7980,0.8080,0.7990,High

@@ -1,0 +1,88 @@
+{
+  "experiment_name": "ablation_study",
+  "probe_report_path": "/content/collapse-resistant/research_results/probe_out/student2_adaptive/representation_drift_report.json",
+  "ensemble_report_path": "/content/collapse-resistant/research_results/ensemble_out/student2_adaptive/variance_report.json",
+  "ablation_results": {
+    "full": {
+      "ablation_config": "full",
+      "representation_weight": 0.6,
+      "uncertainty_weight": 0.4,
+      "representation_risk": 0.7652472465100135,
+      "uncertainty_risk": 0.8570854068951939,
+      "scrs": 0.8019825106640857,
+      "risk_label": "Critical",
+      "normalized_metrics": {
+        "representation_group": {
+          "hidden_state_drift": 0.9832880509049048,
+          "embedding_drift": 0.9951896469050553,
+          "attention_drift": 0.5139220128456752,
+          "kl_divergence": 0.5835529531910147,
+          "js_divergence": 0.6041089037915209,
+          "prediction_agreement": 0.9114219114219114
+        },
+        "uncertainty_group": {
+          "predictive_entropy": 0.9748255050182343,
+          "top1_confidence": 0.9887145170290023,
+          "top5_spread": 0.9894999241549521,
+          "probability_variance": 0.9998660789318091,
+          "confidence_margin": 0.9970738168992103,
+          "mc_dropout_consistency": 0.1925325993379552
+        }
+      }
+    },
+    "no_prdaf": {
+      "ablation_config": "no_prdaf",
+      "representation_weight": 0.0,
+      "uncertainty_weight": 1.0,
+      "representation_risk": 0.7652472465100135,
+      "uncertainty_risk": 0.8570854068951939,
+      "scrs": 0.8570854068951939,
+      "risk_label": "Critical",
+      "normalized_metrics": {
+        "representation_group": {
+          "hidden_state_drift": 0.9832880509049048,
+          "embedding_drift": 0.9951896469050553,
+          "attention_drift": 0.5139220128456752,
+          "kl_divergence": 0.5835529531910147,
+          "js_divergence": 0.6041089037915209,
+          "prediction_agreement": 0.9114219114219114
+        },
+        "uncertainty_group": {
+          "predictive_entropy": 0.9748255050182343,
+          "top1_confidence": 0.9887145170290023,
+          "top5_spread": 0.9894999241549521,
+          "probability_variance": 0.9998660789318091,
+          "confidence_margin": 0.9970738168992103,
+          "mc_dropout_consistency": 0.1925325993379552
+        }
+      }
+    },
+    "no_evm": {
+      "ablation_config": "no_evm",
+      "representation_weight": 1.0,
+      "uncertainty_weight": 0.0,
+      "representation_risk": 0.7652472465100135,
+      "uncertainty_risk": 0.8570854068951939,
+      "scrs": 0.7652472465100135,
+      "risk_label": "High",
+      "normalized_metrics": {
+        "representation_group": {
+          "hidden_state_drift": 0.9832880509049048,
+          "embedding_drift": 0.9951896469050553,
+          "attention_drift": 0.5139220128456752,
+          "kl_divergence": 0.5835529531910147,
+          "js_divergence": 0.6041089037915209,
+          "prediction_agreement": 0.9114219114219114
+        },
+        "uncertainty_group": {
+          "predictive_entropy": 0.9748255050182343,
+          "top1_confidence": 0.9887145170290023,
+          "top5_spread": 0.9894999241549521,
+          "probability_variance": 0.9998660789318091,
+          "confidence_margin": 0.9970738168992103,
+          "mc_dropout_consistency": 0.1925325993379552
+        }
+      }
+    }
+  }
+}

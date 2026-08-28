@@ -1,0 +1,45 @@
+================================================================================
+                   SYNTHETIC COLLAPSE RISK SCORE (SCRS) REPORT
+================================================================================
+
+OVERALL SCRS SCORE  : 0.8020 / 1.0000
+RISK CATEGORY LABEL : CRITICAL
+
+--------------------------------------------------------------------------------
+1. GROUP RISK BREAKDOWN
+--------------------------------------------------------------------------------
+  • Representation Risk (Weight: 60.0%): 0.7652
+  • Uncertainty Risk    (Weight: 40.0%): 0.8571
+
+--------------------------------------------------------------------------------
+2. REPRESENTATION RISK METRICS (Probe Upstream)
+--------------------------------------------------------------------------------
+  - hidden_state_drift       | Risk: 0.9833 | Metric Weight: 0.1667 | Total Contrib: 0.0983
+  - embedding_drift          | Risk: 0.9952 | Metric Weight: 0.1667 | Total Contrib: 0.0995
+  - attention_drift          | Risk: 0.5139 | Metric Weight: 0.1667 | Total Contrib: 0.0514
+  - kl_divergence            | Risk: 0.5836 | Metric Weight: 0.1667 | Total Contrib: 0.0584
+  - js_divergence            | Risk: 0.6041 | Metric Weight: 0.1667 | Total Contrib: 0.0604
+  - prediction_agreement     | Risk: 0.9114 | Metric Weight: 0.1667 | Total Contrib: 0.0911
+
+--------------------------------------------------------------------------------
+3. UNCERTAINTY RISK METRICS (Ensemble Upstream)
+--------------------------------------------------------------------------------
+  - predictive_entropy       | Risk: 0.9748 | Metric Weight: 0.1667 | Total Contrib: 0.0650
+  - top1_confidence          | Risk: 0.9887 | Metric Weight: 0.1667 | Total Contrib: 0.0659
+  - top5_spread              | Risk: 0.9895 | Metric Weight: 0.1667 | Total Contrib: 0.0660
+  - probability_variance     | Risk: 0.9999 | Metric Weight: 0.1667 | Total Contrib: 0.0667
+  - confidence_margin        | Risk: 0.9971 | Metric Weight: 0.1667 | Total Contrib: 0.0665
+  - mc_dropout_consistency   | Risk: 0.1925 | Metric Weight: 0.1667 | Total Contrib: 0.0128
+
+--------------------------------------------------------------------------------
+4. NORMALIZATION METADATA
+--------------------------------------------------------------------------------
+  • KL Divergence Bounds : Min = 0.00, Max = 10.00
+  • Raw KL Divergence    : 5.8355
+  • Raw JS Divergence    : 0.6041
+  • Raw Entropy          : 0.9748
+  • Raw MC Consistency   : 0.8075
+
+================================================================================
+                               END OF SCRS REPORT
+================================================================================

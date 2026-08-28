@@ -1,0 +1,22 @@
+{
+  "experiment_name": "cka_representation_analysis",
+  "seed": 42,
+  "configuration": {
+    "anchor_model_path": "/content/drive/MyDrive/collapse-resistant-assets/checkpoints/anchor_model/frozen",
+    "student_model_path": "/content/drive/MyDrive/collapse-resistant-assets/student2/adaptive/best",
+    "dataset_path": "/content/drive/MyDrive/collapse-resistant-assets/data/processed/clean_wikitext.txt",
+    "max_prompts": 100,
+    "batch_size": 2
+  },
+  "mean_cka_score": 0.28373625362558025,
+  "layer_wise_cka": {
+    "embedding_layer": 0.5809872701764107,
+    "layer_1": 0.2956402687728405,
+    "layer_2": 0.24344559907913207,
+    "layer_3": 0.23754469692707061,
+    "layer_4": 0.23172570750117302,
+    "layer_5": 0.2209639048576355,
+    "layer_6": 0.1758463280647993
+  },
+  "num_prompts_evaluated": 100
+}
